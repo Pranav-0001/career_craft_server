@@ -8,6 +8,7 @@ const userSchema=new Schema<User>({
     email:{
         type:'string',
         required:true,
+        unique:true
     },
     username:{
         type:'string',
