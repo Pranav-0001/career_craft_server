@@ -29,6 +29,18 @@ const userSchema=new Schema<User>({
         type:'string',
         required:true,
 
+    },
+    company:{
+        type:'string',
+        default:null
+    },
+    location:{
+        type:'string',
+        default:null
+    },
+    role:{
+        type:'string',
+        default:'candidate'
     }
 
 })

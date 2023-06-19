@@ -1,10 +1,11 @@
 import { userRepository } from "../../../infra/repositories/userRepository";
 import { User } from "../../../domain/models/user";
+import bcrypt,{} from 'bcrypt'
 
 export const signupUser = (userRepository:userRepository)=>async (firstname:string,lastname:string,username:string,email:string,password:string):Promise<User>=>{
     
-    console.log();
-    
+
+    password=await bcrypt.hash(password,10)
     const newUser:User={
         email,
         firstname,

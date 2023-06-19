@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userLoginController, userRegister } from "../controllers/userController";
+import { generateOtp, userLoginController, userRegister } from "../controllers/userController";
 
 const router=Router()
 
@@ -9,8 +9,11 @@ router.get('/',(req,res)=>{
     
 }) 
 
+
 router.post('/login' , userLoginController )
 router.post('/register',userRegister)
+router.post('/generate-otp',generateOtp)
+
 
 
 export default router
