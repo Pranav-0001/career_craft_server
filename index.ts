@@ -3,6 +3,11 @@ import dotenv from 'dotenv'
 import userRouter from './src/Interfaces/Routes/userRouter'
 import employerRouter from './src/Interfaces/Routes/employerRouter'
 import { db } from './src/infra/Database/config'
+
+import cookieParser from 'cookie-parser'
+
+
+
 const cors=require('cors')
 dotenv.config()
 
@@ -14,6 +19,7 @@ app.use(cors({
     methods: ["GET", "POST"],
     credentials: true
 }))
+app.use(cookieParser())
 
 app.use("/",userRouter)
 app.use("/employer",employerRouter)

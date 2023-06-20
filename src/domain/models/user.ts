@@ -1,4 +1,5 @@
 export interface User {
+    
     email     : string;
     username  : string;
     firstname : string;
@@ -7,4 +8,5 @@ export interface User {
     company  ?: string;
     location ?: string;
     role     ?: string;
+    profileImg?:string;
 }

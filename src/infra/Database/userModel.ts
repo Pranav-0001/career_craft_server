@@ -41,6 +41,10 @@ const userSchema=new Schema<User>({
     role:{
         type:'string',
         default:'candidate'
+    },
+    profileImg:{
+        type:'string',
+        default:'https://cdn-icons-png.flaticon.com/512/3607/3607444.png'
     }
 
 })
