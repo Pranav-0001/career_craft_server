@@ -5,6 +5,7 @@ const router=Router()
 
 router.post("/generate-otp",generateOtp)
 router.post("/register",EmployerRegister)
+router.post("/postjob",)
 
 
 export default router

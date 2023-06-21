@@ -4,7 +4,8 @@ import { loginUser } from "../../app/usecases/user/loginUser";
 import { UserRepositoryImpl } from "../../infra/repositories/userRepository";
 import { signupUser } from "../../app/usecases/user/SignupUser";
 import { generateSignupOtp } from "../../app/usecases/user/generateOtp";
-import jsonwebtoken  from 'jsonwebtoken'
+import jsonwebtoken, { JwtPayload }  from 'jsonwebtoken'
+import { validate, validateRefresh } from "../../utils/validateJWT";
  
 const db=userModel;
 const userRepository = UserRepositoryImpl(db)
@@ -58,4 +59,30 @@ export const generateOtp =async(req:Request,res:Response)=>{
     const email: string= req.body.email
     const otp =  generateSignupOtp(email)
     res.json(otp)
+}
+
+export const removeRefreshToken=async(req:Request,res:Response)=>{
+    res.clearCookie('userJWT')
+    res.json({status:true})
+}
+
+export const auth=async (req:Request , res:Response)=>{
+    const {token}= req.body
+    let status=validate(token)
+    if(status){
+        res.json({status:true})
+    }else{
+       const refreshToken=req.cookies.userJWT
+       const refreshStatus=validateRefresh(refreshToken)
+       
+       if(refreshStatus){
+         const data=jsonwebtoken.verify(refreshToken,'refresh') as JwtPayload
+         const accessToken=jsonwebtoken.sign({sub:data.sub},'KEY',{expiresIn:'3d'})
+         res.json({status:true,accessToken})
+       }else{
+        res.clearCookie('userJWT')
+        res.json({status:false})
+       }      
+    }
+    
 }

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { generateOtp, userLoginController, userRegister } from "../controllers/userController";
+import { auth, generateOtp, removeRefreshToken, userLoginController, userRegister } from "../controllers/userController";
 
 const router=Router()
 
@@ -9,10 +9,11 @@ router.get('/',(req,res)=>{
     
 }) 
 
-
+router.post('/',auth)
 router.post('/login' , userLoginController )
 router.post('/register',userRegister)
 router.post('/generate-otp',generateOtp)
+router.post('/logout',removeRefreshToken)
 
 
 
