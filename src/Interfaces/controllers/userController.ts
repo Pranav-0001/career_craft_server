@@ -21,10 +21,10 @@ export const userLoginController = async (req:Request, res:Response) => {
         } else if(user==='password'){
             res.json({ message: "Invalid password" });
         }else{
-            const {_id} = JSON.parse(JSON.stringify(user))
+            const {_id,role} = JSON.parse(JSON.stringify(user))
             
-            const accessToken=jsonwebtoken.sign({sub:_id},'KEY',{expiresIn:'3d'})
-            const refreshToken=jsonwebtoken.sign({sub:_id},'refresh',{expiresIn:'100d'})
+            const accessToken=jsonwebtoken.sign({sub:{_id,role}},'KEY',{expiresIn:'3d'})
+            const refreshToken=jsonwebtoken.sign({sub:{_id,role}},'refresh',{expiresIn:'100d'})
             res.cookie('userJWT',refreshToken,{
                 httpOnly:true,
                 secure:true,

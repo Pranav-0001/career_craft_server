@@ -44,6 +44,14 @@ const jobSchema= new Schema<Job>({
         type:'string',
         required:true
     },
+    EmployerId:{
+        type:'string',
+        required:true
+    },
+    staus:{
+        type:'boolean',
+        default:true
+    }
 })
 
 export const jobModel:MongoDBJob=mongoose.connection.model<Document<any, any, any> & Job>('job', jobSchema);

@@ -9,4 +9,7 @@ export interface Job {
     salaryType:string;
     rangeSalary?:string
     fixedSalary?:string
+    EmployerId:string
+    staus?:boolean
+    
 }
