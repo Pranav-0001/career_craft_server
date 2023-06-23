@@ -32,7 +32,7 @@ export const validateRefresh = (token:string):boolean=>{
           return false;
         }
     }
-    console.log(data);
+    
     return true
     
     }catch(err){

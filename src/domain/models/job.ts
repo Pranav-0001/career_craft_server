@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose";
+
 export interface Job {
     title:string;
     category:string;
@@ -9,7 +11,7 @@ export interface Job {
     salaryType:string;
     rangeSalary?:string
     fixedSalary?:string
-    EmployerId:string
-    staus?:boolean
+    EmployerId:ObjectId
+    status?:boolean
     
 }

@@ -1,4 +1,4 @@
-import { Request,Response } from "express";
+import { Request,Response } from "express"
 import {userModel} from '../../infra/Database/userModel'
 import {jobModel} from '../../infra/Database/jobModel'
 import { UserRepositoryImpl } from "../../infra/repositories/userRepository";
@@ -57,8 +57,9 @@ export const getEmployerJobs=async (req:Request,res:Response)=>{
     const {id}=req.params
     try{
         const jobs=await getEmpJobs(jobRepository)(id)
-        res.json({jobs})
-        
+        const newAccessToken=res.locals.newAccessToken
+        if (newAccessToken) res.json({jobs,newAccessToken})
+        else res.json({jobs})
 
     }catch(err){
         res.status(500).json({message:"Internal Server Error"})

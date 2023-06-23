@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema ,Document } from "mongoose";
+import mongoose, { Model, Schema ,Document, Types } from "mongoose";
 import { Job } from "../../domain/models/job";
 
 export type MongoDBJob=Model<Document<any,any,any>&Job>;
@@ -45,10 +45,10 @@ const jobSchema= new Schema<Job>({
         required:true
     },
     EmployerId:{
-        type:'string',
+        type:Types.ObjectId,
         required:true
     },
-    staus:{
+    status:{
         type:'boolean',
         default:true
     }
