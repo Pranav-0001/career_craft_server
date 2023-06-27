@@ -12,7 +12,7 @@ interface decode {
 export const  empAuth=(req:Request,res:Response,next:NextFunction)=>{
     try{
         let token=req.headers.accesstoken
-        let accKey:jwt.Secret =process.env.ACCESSTOKEN as jwt.Secret
+        let accKey:jwt.Secret =process.env.ACCESSTOKEN as jwt.Secret 
         if(token) {
             token=token.toString()
             let decoded=jwt.verify(token,accKey) as decode

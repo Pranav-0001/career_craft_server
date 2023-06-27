@@ -2,7 +2,7 @@ import { userRepository } from "../../../infra/repositories/userRepository";
 import { User } from "../../../domain/models/user";
 import bcrypt,{} from 'bcrypt'
 
-export const signupUser = (userRepository:userRepository)=>async (firstname:string,lastname:string,username:string,email:string,password:string):Promise<User>=>{
+export const signupUser = (userRepository:userRepository)=>async (firstname:string,lastname:string,username:string,email:string,password:string,isGoogle:boolean,profileImg:string):Promise<User>=>{
     
 
     password=await bcrypt.hash(password,10)
@@ -11,7 +11,9 @@ export const signupUser = (userRepository:userRepository)=>async (firstname:stri
         firstname,
         lastname,
         username,
-        password
+        password,
+        isGoogle,
+        profileImg
     }
 
     const createdUser = await userRepository.create(newUser)

@@ -2,7 +2,7 @@ import { jobRepository } from "../../../infra/repositories/jobRepository";
 import { Job } from "../../../domain/models/job";
 import { ObjectId } from "mongoose";
 
-export const addJobEmp=(jobrepository:jobRepository)=>async(title:string,category:string,qualification:string,experience:string,deadline:string,salaryType:string,desc:string,jobType:string,rangeSalary:string,fixedSalary:string,EmployerId:ObjectId)=>{
+export const addJobEmp=(jobrepository:jobRepository)=>async(title:string,category:string,qualification:string,experience:string,deadline:string,salaryType:string,desc:string,jobType:string,fixedSalary:number|undefined,EmployerId:ObjectId,salaryFrom:number|undefined,salaryTo:number|undefined)=>{
 
     const newjob:Job={
         title,
@@ -14,8 +14,9 @@ export const addJobEmp=(jobrepository:jobRepository)=>async(title:string,categor
         jobType,
         desc,
         fixedSalary,
-        rangeSalary,
         EmployerId,
+        salaryFrom:salaryFrom??fixedSalary,
+        salaryTo:salaryTo??fixedSalary
     }
     const createdJob=await jobrepository.addJob(newjob)
     return createdJob

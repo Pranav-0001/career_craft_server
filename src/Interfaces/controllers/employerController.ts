@@ -7,7 +7,8 @@ import { signupEmp } from "../../app/usecases/employer/SignupEmp";
 import { addJobEmp } from "../../app/usecases/employer/postjob";
 import { JobRepositoryImpl } from "../../infra/repositories/jobRepository";
 import {getEmpJobs} from '../../app/usecases/employer/getEmpJobs'
-
+import jsonwebtoken from 'jsonwebtoken'
+import { Job } from "../../domain/models/job";
  
 const db=userModel;
 const empDB=jobModel
@@ -30,7 +31,16 @@ export const EmployerRegister = async (req:Request,res:Response)=>{
     const role='employer'
     try{
         const employer=await signupEmp(userRepository)(firstname,lastname,username,email,password,company,location,role)
-        res.status(201).json({status:"success",employer})
+        const {_id} = JSON.parse(JSON.stringify(employer)) 
+        const accessToken=jsonwebtoken.sign({sub:{_id,role}},'KEY',{expiresIn:'3d'})
+            const refreshToken=jsonwebtoken.sign({sub:{_id,role}},'refresh',{expiresIn:'100d'})
+            res.cookie('userJWT',refreshToken,{
+                httpOnly:true,
+                secure:true,
+                sameSite:'none',
+                maxAge: 100*24*60*60*1000
+            })
+        res.status(201).json({status:"success",employer,accessToken})
 
     }catch(err){
         res.status(500).json({status:"server error"})
@@ -39,9 +49,9 @@ export const EmployerRegister = async (req:Request,res:Response)=>{
 }
 
 export const postJob=async (req:Request,res:Response)=>{
-    const {title,category,qualification,experience,deadline,salaryType,desc,jobType,rangeSalary,fixedSalary,EmployerId}=req.body
+    const {title,category,qualification,experience,deadline,salaryType,desc,jobType,salaryFrom,salaryTo,fixedSalary,EmployerId}=req.body as Job
     try{
-        const result=await addJobEmp(jobRepository)(title,category,qualification,experience,deadline,salaryType,desc,jobType,rangeSalary,fixedSalary,EmployerId)
+        const result=await addJobEmp(jobRepository)(title,category,qualification,experience,deadline,salaryType,desc,jobType,fixedSalary,EmployerId,salaryFrom,salaryTo)
         res.json({status:true,jobData:result})
     }catch(err){
         res.status(500).json({status:"server error"})

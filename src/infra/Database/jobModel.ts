@@ -33,12 +33,20 @@ const jobSchema= new Schema<Job>({
         required:true
     },
     fixedSalary:{
-        type:'string',
+        type:'number',
         
     },
     rangeSalary:{
         type:'string',
        
+    },
+    salaryFrom:{
+        type:'number',
+
+    },
+    salaryTo:{
+        type:'number',
+
     },
     desc:{
         type:'string',

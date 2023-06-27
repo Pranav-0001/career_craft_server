@@ -10,8 +10,11 @@ export interface Job {
     jobType:string;
     salaryType:string;
     rangeSalary?:string
-    fixedSalary?:string
+    salaryFrom?:number
+    salaryTo?:number
+    fixedSalary?:number
     EmployerId:ObjectId
     status?:boolean
+   
     
 }

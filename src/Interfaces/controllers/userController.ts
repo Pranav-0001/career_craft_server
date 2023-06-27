@@ -12,7 +12,7 @@ const userRepository = UserRepositoryImpl(db)
 
 export const userLoginController = async (req:Request, res:Response) => {
     const {email,password}=req.body
-    console.log(req.cookies);
+    
     
     try{
         let user=await loginUser(userRepository)(email,password);
@@ -40,10 +40,20 @@ export const userLoginController = async (req:Request, res:Response) => {
 }
 
 export const userRegister = async (req:Request,res:Response)=>{
-    const {firstname,lastname,username,email,password}=req.body
+    const {firstname,lastname,username,email,password,isGoogle,profileImg}=req.body
     try{
-        const user= await signupUser(userRepository)(firstname,lastname,username,email,password)
-        res.status(201).json({message:"Signup successful",user})
+        const user= await signupUser(userRepository)(firstname,lastname,username,email,password,isGoogle,profileImg)
+        const {_id,role} = JSON.parse(JSON.stringify(user))
+
+            const accessToken=jsonwebtoken.sign({sub:{_id,role}},'KEY',{expiresIn:'3d'})
+            const refreshToken=jsonwebtoken.sign({sub:{_id,role}},'refresh',{expiresIn:'100d'})
+            res.cookie('userJWT',refreshToken,{
+                httpOnly:true,
+                secure:true,
+                sameSite:'none',
+                maxAge: 100*24*60*60*1000
+            })
+        res.status(201).json({message:"Signup successful",user,accessToken})
     }catch(err){
         console.log(JSON.parse(JSON.stringify(err)).code); 
         if(JSON.parse(JSON.stringify(err)).code==11000){

@@ -9,4 +9,5 @@ export interface User {
     location ?: string;
     role     ?: string;
     profileImg?:string;
+    isGoogle?:boolean
 }
