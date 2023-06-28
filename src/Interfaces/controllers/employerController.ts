@@ -31,16 +31,16 @@ export const EmployerRegister = async (req:Request,res:Response)=>{
     const role='employer'
     try{
         const employer=await signupEmp(userRepository)(firstname,lastname,username,email,password,company,location,role)
-        const {_id} = JSON.parse(JSON.stringify(employer)) 
-        const accessToken=jsonwebtoken.sign({sub:{_id,role}},'KEY',{expiresIn:'3d'})
-            const refreshToken=jsonwebtoken.sign({sub:{_id,role}},'refresh',{expiresIn:'100d'})
-            res.cookie('userJWT',refreshToken,{
-                httpOnly:true,
-                secure:true,
-                sameSite:'none',
-                maxAge: 100*24*60*60*1000
-            })
-        res.status(201).json({status:"success",employer,accessToken})
+        // const {_id} = JSON.parse(JSON.stringify(employer)) 
+        // const accessToken=jsonwebtoken.sign({sub:{_id,role}},'KEY',{expiresIn:'3d'})
+        //     const refreshToken=jsonwebtoken.sign({sub:{_id,role}},'refresh',{expiresIn:'100d'})
+        //     res.cookie('userJWT',refreshToken,{
+        //         httpOnly:true,
+        //         secure:true,
+        //         sameSite:'none',
+        //         maxAge: 100*24*60*60*1000
+        //     })
+        res.status(201).json({status:"success",employer})
 
     }catch(err){
         res.status(500).json({status:"server error"})

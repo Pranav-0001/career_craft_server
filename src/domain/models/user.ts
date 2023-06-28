@@ -10,4 +10,5 @@ export interface User {
     role     ?: string;
     profileImg?:string;
     isGoogle?:boolean
+    status?:boolean
 }

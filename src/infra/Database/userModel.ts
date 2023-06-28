@@ -49,6 +49,10 @@ const userSchema=new Schema<User>({
     isGoogle:{
         type:'boolean',
         default:false
+    },
+    status:{
+        type:'boolean',
+        default:true
     }
 
 })

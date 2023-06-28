@@ -20,7 +20,14 @@ export const userLoginController = async (req:Request, res:Response) => {
             res.json({ message: "Invalid Email" });
         } else if(user==='password'){
             res.json({ message: "Invalid password" });
-        }else{
+        }else if(user==="employer" || user==="candidate"){
+             if(user==="employer"){
+                res.json({message:`Verification Pending. You'll get an email when account is verified.`,notVerified:true})
+             }else{
+                res.json({message:`Account is banned by admin.`})
+             }
+        }
+        else{
             const {_id,role} = JSON.parse(JSON.stringify(user))
             
             const accessToken=jsonwebtoken.sign({sub:{_id,role}},'KEY',{expiresIn:'3d'})

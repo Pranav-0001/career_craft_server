@@ -14,8 +14,9 @@ export const signupEmp = (userRepository:userRepository)=>async (firstname:strin
         password,
         company,
         location,
-        role
-    }
+        role,
+        status:false  
+    } 
 
     const createdUser = await userRepository.create(newEmp)
     return createdUser

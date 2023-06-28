@@ -1,4 +1,5 @@
 export interface admin{
-    username:string;
-    password:string
+    email:string;
+    password:string;
+    profileImg?:string
 }
