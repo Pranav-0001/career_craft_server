@@ -6,6 +6,7 @@ import { signupUser } from "../../app/usecases/user/SignupUser";
 import { generateSignupOtp } from "../../app/usecases/user/generateOtp";
 import jsonwebtoken, { JwtPayload }  from 'jsonwebtoken'
 import { validate, validateRefresh } from "../../utils/validateJWT";
+import { Employers, Nonpremium, Premium } from "../../app/usecases/admin/getUsers";
  
 const db=userModel;
 const userRepository = UserRepositoryImpl(db)
@@ -103,4 +104,38 @@ export const auth=async (req:Request , res:Response)=>{
     }
     
 }
+export const getNonPremiumUsers=async(req:Request,res:Response)=>{
+    try {
+       const users=await Nonpremium(userRepository)() 
+       if (res.locals.newadminaccesstoken) res.json({users,newAdminAccessToken:res.locals.newadminaccesstoken})
+       
+       else res.json({users})
+       
+    } catch (error) {
+        
+    }
+}
 
+export const getPremiumUsers= async (req:Request,res:Response)=>{
+    try{
+        const users=await Premium(userRepository)()
+       if (res.locals.newadminaccesstoken) res.json({users,newAdminAccessToken:res.locals.newadminaccesstoken})
+       else res.json({users})
+
+
+    }catch(err){
+        console.log(err);
+    }
+}
+
+export const getAllEmployers= async (req:Request,res:Response)=>{
+    try{
+        const users=await Employers(userRepository)()
+       if (res.locals.newadminaccesstoken) res.json({users,newAdminAccessToken:res.locals.newadminaccesstoken})
+       else res.json({users})
+
+
+    }catch(err){
+        console.log(err);
+    }
+}

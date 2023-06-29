@@ -3,12 +3,13 @@ import {userModel} from '../../infra/Database/userModel'
 import {jobModel} from '../../infra/Database/jobModel'
 import { UserRepositoryImpl } from "../../infra/repositories/userRepository";
 import { generateEmpSignupOtp } from "../../app/usecases/employer/generateOtpEmp";
-import { signupEmp } from "../../app/usecases/employer/SignupEmp";
+import { signupEmp, verifyRmployer } from "../../app/usecases/employer/SignupEmp";
 import { addJobEmp } from "../../app/usecases/employer/postjob";
 import { JobRepositoryImpl } from "../../infra/repositories/jobRepository";
 import {getEmpJobs} from '../../app/usecases/employer/getEmpJobs'
 import jsonwebtoken from 'jsonwebtoken'
 import { Job } from "../../domain/models/job";
+import { sentConfirmationMail } from "../../app/usecases/admin/getUsers";
  
 const db=userModel;
 const empDB=jobModel
@@ -73,5 +74,21 @@ export const getEmployerJobs=async (req:Request,res:Response)=>{
 
     }catch(err){
         res.status(500).json({message:"Internal Server Error"})
+    }
+}
+
+export const updateEmpStatus=async(req:Request,res:Response)=>{
+
+    const newAccessToken=res.locals.newAccessToken
+    try{
+        const {empId,email}= req.body
+        const result=await verifyRmployer(userRepository)(empId)
+        if(result.modifiedCount===1){
+            sentConfirmationMail(email)
+        }
+        if(newAccessToken) res.json({result,newAccessToken})
+        else res.json({result})
+    }catch(err){
+
     }
 }

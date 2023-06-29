@@ -21,3 +21,8 @@ export const signupEmp = (userRepository:userRepository)=>async (firstname:strin
     const createdUser = await userRepository.create(newEmp)
     return createdUser
 }
+
+export const verifyRmployer=(userrepository:userRepository)=>async(empId:string)=>{
+    const response=await userrepository.findAndUpdate(empId)
+    return response
+}
