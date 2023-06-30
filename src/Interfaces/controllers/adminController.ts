@@ -37,3 +37,7 @@ export const adminLogin=async(req:Request,res:Response)=>{
     
 }
 
+export const adminLogout=async (req:Request,res:Response)=>{
+    res.clearCookie('adminJWT')
+    res.json({signout:true})
+}

@@ -14,7 +14,7 @@ export const adminAuth=(req:Request,res:Response,next:NextFunction)=>{
         let accKey:jwt.Secret =process.env.ACCESSTOKEN as jwt.Secret 
         
         if(token){
-            console.log(token);
+          
             
             token=token.toString()
             let decoded=jwt.verify(token,accKey) as decode
