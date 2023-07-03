@@ -12,3 +12,28 @@ export const getJobsCount=(jobrepository:jobRepository)=>async(domain:string|nul
     const JobsCount= await jobrepository.getJobsCount(domain,salary,type)
     return JobsCount
 }
+
+export const getJobData=(jobrepository:jobRepository)=>async(id:string)=>{
+    const jobData=await jobrepository.getSingleJob(id)
+    return jobData
+}
+
+export const bookmarkJob=(jobrepository:jobRepository)=>async(jobId:string,user:string)=>{
+    const response=await jobrepository.saveJob(jobId,user)
+    return response
+}
+
+export const removeBookmarkJob=(jobrepository:jobRepository)=>async(jobId:string,user:string)=>{
+    const response=await jobrepository.removeSaved(jobId,user)
+    return response
+}
+
+export const applyJob=(jobrepository:jobRepository)=>async(jobId:string,user:string)=>{
+    const appliedOn=new Date().toLocaleString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    console.log(appliedOn);
+    const response=await jobrepository.userApplyJob(jobId,user,appliedOn)
+}

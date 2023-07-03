@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { auth, generateOtp, removeRefreshToken, userLoginController, userRegister } from "../controllers/userController";
-import { getAllJobs, getDomains } from "../controllers/jobController";
+import { applyJobCntrl, bookmarkCntrl, getAllJobs, getDomains, getSingleJOb, removeBookmarkCntrl } from "../controllers/jobController";
 
 const router=Router()
 
@@ -17,6 +17,9 @@ router.post('/generate-otp',generateOtp)
 router.post('/logout',removeRefreshToken)
 router.get('/alljobs',getAllJobs)
 router.get('/domains',getDomains)
-
+router.get('/job/:id',getSingleJOb)
+router.post('/bookmarkjob',bookmarkCntrl)
+router.post('/removesaved',removeBookmarkCntrl)
+router.post('/applyjob',applyJobCntrl)
 
 export default router

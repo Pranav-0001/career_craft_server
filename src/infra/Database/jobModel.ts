@@ -59,6 +59,14 @@ const jobSchema= new Schema<Job>({
     status:{
         type:'boolean',
         default:true
+    },
+    savedBy:{
+        type:Array,
+        
+    },
+    appliedBy:{
+        type:Object,
+        
     }
 })
 

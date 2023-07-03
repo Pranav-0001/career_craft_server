@@ -1,7 +1,7 @@
 import { Request,Response } from "express"
 import {jobModel} from '../../infra/Database/jobModel'
 import { JobRepositoryImpl } from "../../infra/repositories/jobRepository"
-import { getJobs, getJobsCount } from "../../app/usecases/user/getJobs"
+import { applyJob, bookmarkJob, getJobData, getJobs, getJobsCount, removeBookmarkJob } from "../../app/usecases/user/getJobs"
 import { getDomain } from "../../app/usecases/user/getDomain"
 
 const empDB=jobModel
@@ -39,6 +39,53 @@ export const getDomains=async(req:Request,res:Response)=>{
         res.json({domains})
     }catch(err){
         console.log(err);
+        
+    }
+}
+
+export const getSingleJOb=async(req:Request,res:Response)=>{
+    try {
+        const {id}=req.params
+        const jobData:any=await getJobData(jobRepository)(id)
+       
+        
+        res.status(201).json({job:jobData[0]})
+        
+    } catch (error) {
+        
+    }
+}
+
+export const bookmarkCntrl=async(req:Request,res:Response)=>{
+    try {
+        const {jobId,user} = req.body
+        const result=await bookmarkJob(jobRepository)(jobId,user)
+        console.log(result);
+        res.status(201).json({message:"success"})
+    } catch (error) {
+        
+    }
+}
+export const removeBookmarkCntrl=async(req:Request,res:Response)=>{
+    try {
+        const {jobId,user} = req.body
+        const result=await removeBookmarkJob(jobRepository)(jobId,user)
+        console.log(result);
+        res.status(201).json({message:"success"})
+        
+    } catch (error) {
+        
+    }
+}
+
+export const applyJobCntrl=async(req:Request,res:Response)=>{
+    try {
+        const {jobId,user} =req.body
+        
+        
+        const result = await applyJob(jobRepository)(jobId,user)
+        res.status(201).json({message:"success"})
+    } catch (error) {
         
     }
 }

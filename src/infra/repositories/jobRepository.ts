@@ -1,6 +1,7 @@
 import { promises } from "dns";
-import { Job } from "../../domain/models/job";
+import { Job, applied } from "../../domain/models/job";
 import { MongoDBJob } from "../Database/jobModel";
+import mongoose, { UpdateWriteOpResult,ObjectId } from "mongoose";
 
 export type jobRepository = {
     addJob: (jobData: Job) => Promise<Job>;
@@ -8,6 +9,10 @@ export type jobRepository = {
     getJobs: (page: number, domain: string | null, salary: string | null, type: string | null, sort: string | null) => Promise<Job[]>
     getDomains: () => Promise<string[]>
     getJobsCount: (domain: string | null, salary: string | null, type: string | null) => Promise<number>
+    getSingleJob:(id:string)=>Promise<Job>
+    saveJob:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
+    removeSaved:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
+    userApplyJob:(jobId:string,user:string,appliedOn:string)=>Promise<UpdateWriteOpResult>
 }
 export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
 
@@ -19,6 +24,49 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
     const getEmpJobs = async (id: string): Promise<Job[]> => {
         const jobs = await jobModel.find({ EmployerId: id })
         return jobs
+    }
+
+    const getSingleJob=async(id:string):Promise<any>=>{
+        
+        const _id=new mongoose.Types.ObjectId(id)
+        const data=await jobModel.aggregate([{
+            $match:{_id}
+        },
+        {
+            $lookup:{
+                from: 'users',
+                localField: 'EmployerId',
+                foreignField: '_id',
+                as: 'Employer'
+            }
+        }
+        ])
+
+        return data
+    }
+
+    const saveJob=async(jobId:string,user:string)=>{
+        const userId=new mongoose.Types.ObjectId(user)
+        const res=await jobModel.updateOne({_id:jobId},{$push:{savedBy:userId}})
+        return res
+    }
+
+    const removeSaved=async(jobId:string,user:string)=>{
+        const userId=new mongoose.Types.ObjectId(user)
+        const res=await jobModel.updateOne({_id:jobId},{$pull:{savedBy:userId}})
+        return res
+    }
+
+    const userApplyJob=async (jobId:string,user:string,appliedOn:string)=>{
+        
+        const userId=new mongoose.Types.ObjectId(user)
+        console.log(userId,jobId);
+        const data:applied={user:userId,appliedOn,status:"Applied"}
+        
+        const res=await jobModel.updateOne({_id:jobId},{$push:{appliedBy:data}})
+        
+        return res
+        
     }
 
     const getJobs = async (page: number, domain: string | null, salary: string | null, type: string | null, sort: string | null): Promise<Job[]> => {
@@ -715,6 +763,10 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
         getEmpJobs,
         getJobs,
         getDomains,
-        getJobsCount
+        getJobsCount,
+        getSingleJob,
+        saveJob,
+        removeSaved,
+        userApplyJob
     }
 }
