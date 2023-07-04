@@ -13,6 +13,7 @@ export type jobRepository = {
     saveJob:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
     removeSaved:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
     userApplyJob:(jobId:string,user:string,appliedOn:string)=>Promise<UpdateWriteOpResult>
+    getBookmarked:(userId:string)=>Promise<Job[]>
 }
 export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
 
@@ -23,6 +24,24 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
 
     const getEmpJobs = async (id: string): Promise<Job[]> => {
         const jobs = await jobModel.find({ EmployerId: id })
+        return jobs
+    }
+
+    const getBookmarked=async (id:string) : Promise<Job[]>=>{
+        const jobs=await jobModel.aggregate([
+            {
+                $match:{
+                    savedBy:{$in:[new mongoose.Types.ObjectId(id)]}
+                }
+            },{
+                $lookup:{
+                    from:'users',
+                    localField:'EmployerId',
+                    foreignField:'_id',
+                    as:'Employer'
+                }
+            }
+        ])
         return jobs
     }
 
@@ -767,6 +786,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
         getSingleJob,
         saveJob,
         removeSaved,
-        userApplyJob
+        userApplyJob,
+        getBookmarked
     }
 }

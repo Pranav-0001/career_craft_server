@@ -37,3 +37,8 @@ export const applyJob=(jobrepository:jobRepository)=>async(jobId:string,user:str
     console.log(appliedOn);
     const response=await jobrepository.userApplyJob(jobId,user,appliedOn)
 }
+
+export const getBookmarked=(jobrepository:jobRepository)=>async(user:string)=>{
+    const savedJobs= await jobrepository.getBookmarked(user)
+    return savedJobs
+}

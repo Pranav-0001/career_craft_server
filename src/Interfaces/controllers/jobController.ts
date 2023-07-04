@@ -1,7 +1,7 @@
 import { Request,Response } from "express"
 import {jobModel} from '../../infra/Database/jobModel'
 import { JobRepositoryImpl } from "../../infra/repositories/jobRepository"
-import { applyJob, bookmarkJob, getJobData, getJobs, getJobsCount, removeBookmarkJob } from "../../app/usecases/user/getJobs"
+import { applyJob, bookmarkJob, getBookmarked, getJobData, getJobs, getJobsCount, removeBookmarkJob } from "../../app/usecases/user/getJobs"
 import { getDomain } from "../../app/usecases/user/getDomain"
 
 const empDB=jobModel
@@ -85,6 +85,19 @@ export const applyJobCntrl=async(req:Request,res:Response)=>{
         
         const result = await applyJob(jobRepository)(jobId,user)
         res.status(201).json({message:"success"})
+    } catch (error) {
+        
+    }
+}
+
+export const getSavedJobsCntrl=async(req:Request,res:Response)=>{
+    try {
+        const {user}=req.query
+        if(user) {
+            const saved=await getBookmarked(jobRepository)(user?.toString())
+            res.status(201).json({saved})
+        }
+        
     } catch (error) {
         
     }
