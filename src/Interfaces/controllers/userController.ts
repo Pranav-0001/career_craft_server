@@ -7,6 +7,7 @@ import { generateSignupOtp } from "../../app/usecases/user/generateOtp";
 import jsonwebtoken, { JwtPayload }  from 'jsonwebtoken'
 import { validate, validateRefresh } from "../../utils/validateJWT";
 import { Employers, Nonpremium, Premium } from "../../app/usecases/admin/getUsers";
+import { updateBasic } from "../../app/usecases/user/updateUser";
  
 const db=userModel;
 const userRepository = UserRepositoryImpl(db)
@@ -137,5 +138,16 @@ export const getAllEmployers= async (req:Request,res:Response)=>{
 
     }catch(err){
         console.log(err);
+    }
+}
+
+export const updateBasicInformation=async (req:Request,res:Response)=>{
+    const {userId} = req.params
+    if(userId){
+        console.log(req.body);
+        const {firstname,lastname,phone,qualification,objective,about,imageURL}=req.body
+        const response=await updateBasic(userRepository)(firstname,lastname,phone,qualification,objective,about,imageURL,userId)
+        console.log(response);
+        
     }
 }

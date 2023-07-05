@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { auth, generateOtp, removeRefreshToken, userLoginController, userRegister } from "../controllers/userController";
+import { auth, generateOtp, removeRefreshToken, updateBasicInformation, userLoginController, userRegister } from "../controllers/userController";
 import { applyJobCntrl, bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, removeBookmarkCntrl } from "../controllers/jobController";
 
 const router=Router()
@@ -22,5 +22,6 @@ router.get('/savejobs',getSavedJobsCntrl)
 router.post('/bookmarkjob',bookmarkCntrl)
 router.post('/removesaved',removeBookmarkCntrl)
 router.post('/applyjob',applyJobCntrl)
+router.post('/basic-update/:userId',updateBasicInformation)
 
 export default router

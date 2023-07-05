@@ -11,4 +11,5 @@ export interface User {
     profileImg?:string;
     isGoogle?:boolean
     status?:boolean
+    basic?:object
 }

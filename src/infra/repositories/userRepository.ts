@@ -1,3 +1,4 @@
+import { UpdateWriteOpResult } from "mongoose";
 import { User } from "../../domain/models/user";
 import { MongoDBUser } from "../Database/userModel";
 
@@ -8,6 +9,7 @@ export type userRepository={
     getPremiumUser:()=>Promise<User[]>
     getEmployers:()=>Promise<User[]>
     findAndUpdate:(empId:string)=>Promise<any>
+    updateBasicInfo:(firstname:string,lastname:string,phone:string,qualification:string,objective:string,about:string,imageURL:string,userId:string)=>Promise<UpdateWriteOpResult>
 
 }
 
@@ -50,6 +52,22 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         
     }
 
+    const updateBasicInfo=async(firstname:string,lastname:string,phone:string,qualification:string,objective:string,about:string,imageURL:string,userId:string):Promise<UpdateWriteOpResult>=>{
+        
+        const basicInfo={
+            firstname,
+            lastname,
+            phone,
+            qualification,
+            objective,
+            about,
+            imageURL
+        }
+
+        const result=await userModel.updateOne({_id:userId},{$set:{basic:basicInfo}})
+        return result
+    }
+
     
     return {
         findByEmail ,
@@ -57,6 +75,7 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         getNonPremiumUser,
         getPremiumUser,
         getEmployers,
-        findAndUpdate
+        findAndUpdate,
+        updateBasicInfo
     }
 }

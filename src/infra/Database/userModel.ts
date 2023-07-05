@@ -53,6 +53,9 @@ const userSchema=new Schema<User>({
     status:{
         type:'boolean',
         default:true
+    },
+    basic:{
+        type:'object',
     }
 
 })
