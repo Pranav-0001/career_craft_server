@@ -7,7 +7,7 @@ import { generateSignupOtp } from "../../app/usecases/user/generateOtp";
 import jsonwebtoken, { JwtPayload }  from 'jsonwebtoken'
 import { validate, validateRefresh } from "../../utils/validateJWT";
 import { Employers, Nonpremium, Premium } from "../../app/usecases/admin/getUsers";
-import { updateBasic } from "../../app/usecases/user/updateUser";
+import { updateBasic, updateEducation, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
  
 const db=userModel;
 const userRepository = UserRepositoryImpl(db)
@@ -143,11 +143,43 @@ export const getAllEmployers= async (req:Request,res:Response)=>{
 
 export const updateBasicInformation=async (req:Request,res:Response)=>{
     const {userId} = req.params
+    console.log(req.body);
+    
     if(userId){
-        console.log(req.body);
+        
         const {firstname,lastname,phone,qualification,objective,about,imageURL}=req.body
         const response=await updateBasic(userRepository)(firstname,lastname,phone,qualification,objective,about,imageURL,userId)
         console.log(response);
         
+    }
+}
+
+export const updateProfileInformation=async(req:Request,res:Response)=>{
+    const {userId} = req.params
+    console.log("hey",userId);
+    
+    if(userId){
+        const {father,mother,dob,nationality,permanent,present,marital,gender,skills}=req.body
+        const resoponse=await updateProfile(userRepository)(father,mother,dob,nationality,permanent,present,marital,gender,skills,userId)
+        return resoponse
+    }
+
+}
+
+export const updateEducationInformation=async(req:Request,res:Response)=>{
+    const {userId} = req.params
+    
+    
+    if(userId){
+        const {education,result,institute,starting,ending} = req.body
+        const resoponse=await updateEducation(userRepository)(education,result,institute,starting,ending,userId)
+    }
+}
+
+export const updateProfInformation=async(req:Request,res:Response)=>{
+    const {userId} = req.params
+    if(userId){
+        const {company,designation,experience} = req.body
+        const resoponse = await updateProfessional(userRepository)(company,designation,experience,userId)
     }
 }

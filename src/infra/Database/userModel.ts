@@ -56,6 +56,15 @@ const userSchema=new Schema<User>({
     },
     basic:{
         type:'object',
+    },
+    profile:{
+        type:'object'
+    },
+    education:{
+        type:'object'
+    },
+    professional:{
+        type:'object'
     }
 
 })
