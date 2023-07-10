@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { auth, generateOtp, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateProfInformation, updateProfileInformation, userLoginController, userRegister } from "../controllers/userController";
+import { auth, generateOtp, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateProfInformation, updateProfileInformation, userLoginController, userRegister } from "../controllers/userController";
 import { applyJobCntrl, bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, removeBookmarkCntrl } from "../controllers/jobController";
 
 const router=Router()
@@ -26,5 +26,6 @@ router.post('/basic-update/:userId',updateBasicInformation)
 router.post('/profile-update/:userId',updateProfileInformation)
 router.put('/education-update/:userId',updateEducationInformation)
 router.put('/professional-update/:userId',updateProfInformation)
+router.get('/getuserdata/:userId',getUserDataCntrl)
 
 export default router

@@ -7,7 +7,7 @@ import { generateSignupOtp } from "../../app/usecases/user/generateOtp";
 import jsonwebtoken, { JwtPayload }  from 'jsonwebtoken'
 import { validate, validateRefresh } from "../../utils/validateJWT";
 import { Employers, Nonpremium, Premium } from "../../app/usecases/admin/getUsers";
-import { updateBasic, updateEducation, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
+import { getUserInfo, updateBasic, updateEducation, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
  
 const db=userModel;
 const userRepository = UserRepositoryImpl(db)
@@ -159,8 +159,8 @@ export const updateProfileInformation=async(req:Request,res:Response)=>{
     console.log("hey",userId);
     
     if(userId){
-        const {father,mother,dob,nationality,permanent,present,marital,gender,skills}=req.body
-        const resoponse=await updateProfile(userRepository)(father,mother,dob,nationality,permanent,present,marital,gender,skills,userId)
+        const {father,mother,dob,nationality,permanent,present,marital,gender,skills,projects}=req.body
+        const resoponse=await updateProfile(userRepository)(father,mother,dob,nationality,permanent,present,marital,gender,skills,projects,userId)
         return resoponse
     }
 
@@ -181,5 +181,13 @@ export const updateProfInformation=async(req:Request,res:Response)=>{
     if(userId){
         const {company,designation,experience} = req.body
         const resoponse = await updateProfessional(userRepository)(company,designation,experience,userId)
+    }
+}
+
+export const getUserDataCntrl=async (req:Request,res:Response)=>{
+    const {userId}=req.params
+    if(userId){
+        const result=await getUserInfo(userRepository)(userId)
+        res.status(201).json({user:result})
     }
 }

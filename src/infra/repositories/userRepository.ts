@@ -10,9 +10,10 @@ export type userRepository={
     getEmployers:()=>Promise<User[]>
     findAndUpdate:(empId:string)=>Promise<any>
     updateBasicInfo:(firstname:string,lastname:string,phone:string,qualification:string,objective:string,about:string,imageURL:string,userId:string)=>Promise<UpdateWriteOpResult>
-    updateProfileInfo:(father:string,mother:string,dob:string,nationality:string,permanent:string,present:string,marital:string,gender:string,skills:string,userId:string)=>Promise<UpdateWriteOpResult>
+    updateProfileInfo:(father:string,mother:string,dob:string,nationality:string,permanent:string,present:string,marital:string,gender:string,skills:string,projects:[],userId:string)=>Promise<UpdateWriteOpResult>
     updateEducationInfo:(education:string,result:string,institute:string,starting:string,ending:string,userId:string)=>Promise<UpdateWriteOpResult>
     updateProfessionalInfo:(company:string,designation:string,experience:string,userId:string)=>Promise<UpdateWriteOpResult>
+    getUserInformation:(userId:string)=>Promise<User |null>
 }
 
 export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
@@ -53,7 +54,7 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         return updated
         
     }
-    const updateProfileInfo=async(father:string,mother:string,dob:string,nationality:string,permanent:string,present:string,marital:string,gender:string,skills:string,userId:string)=>{
+    const updateProfileInfo=async(father:string,mother:string,dob:string,nationality:string,permanent:string,present:string,marital:string,gender:string,skills:string,projects:[],userId:string)=>{
         const profileInfo={
             father,
             mother,
@@ -63,7 +64,8 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
             present,
             marital,
             gender,
-            skills
+            skills,
+            projects
         }
         const result=await userModel.updateOne({_id:userId},{$set:{profile:profileInfo}})
         return result
@@ -109,6 +111,11 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         return response
     }
 
+    const getUserInformation=async(userId:string)=>{
+        const response=await userModel.findOne({_id:userId})
+        return response
+    }
+
     
     return {
         findByEmail ,
@@ -120,6 +127,7 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         updateBasicInfo,
         updateProfileInfo,
         updateEducationInfo,
-        updateProfessionalInfo
+        updateProfessionalInfo,
+        getUserInformation
     }
 }

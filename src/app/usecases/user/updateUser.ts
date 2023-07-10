@@ -1,4 +1,4 @@
-import { userRepository } from "../../../infra/repositories/userRepository";
+import { UserRepositoryImpl, userRepository } from "../../../infra/repositories/userRepository";
 import { User } from "../../../domain/models/user";
 
 export const updateBasic=(userRepository:userRepository)=>async(firstname:string,lastname:string,phone:string,qualification:string,objective:string,about:string,imageURL:string,userId:string)=>{
@@ -6,8 +6,8 @@ export const updateBasic=(userRepository:userRepository)=>async(firstname:string
     return updatedBasic
 }
 
-export const updateProfile=(userRepository:userRepository)=>async(father:string,mother:string,dob:string,nationality:string,permanent:string,present:string,marital:string,gender:string,skills:string,userId:string)=>{
-    const updatedProfile=await userRepository.updateProfileInfo(father,mother,dob,nationality,permanent,present,marital,gender,skills,userId)
+export const updateProfile=(userRepository:userRepository)=>async(father:string,mother:string,dob:string,nationality:string,permanent:string,present:string,marital:string,gender:string,skills:string,projects:[],userId:string)=>{
+    const updatedProfile=await userRepository.updateProfileInfo(father,mother,dob,nationality,permanent,present,marital,gender,skills,projects,userId)
     return updatedProfile
 }
 
@@ -19,4 +19,9 @@ export const updateEducation=(userRepository:userRepository)=>async(education:st
 
 export const updateProfessional=(userRepository:userRepository)=>async(company:string,designation:string,experience:string,userId:string)=>{
     const updateProf=await userRepository.updateProfessionalInfo(company,designation,experience,userId)
+}
+
+export const getUserInfo=(userRepository:userRepository)=>async(userId:string)=>{
+    const userInfo=await userRepository.getUserInformation(userId)
+    return userInfo
 }
