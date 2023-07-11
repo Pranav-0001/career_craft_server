@@ -28,15 +28,7 @@ export const removeBookmarkJob=(jobrepository:jobRepository)=>async(jobId:string
     return response
 }
 
-export const applyJob=(jobrepository:jobRepository)=>async(jobId:string,user:string)=>{
-    const appliedOn=new Date().toLocaleString('en-GB', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-      });
-    console.log(appliedOn);
-    const response=await jobrepository.userApplyJob(jobId,user,appliedOn)
-}
+
 
 export const getBookmarked=(jobrepository:jobRepository)=>async(user:string)=>{
     const savedJobs= await jobrepository.getBookmarked(user)

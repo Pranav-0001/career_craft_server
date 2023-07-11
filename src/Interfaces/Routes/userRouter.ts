@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { auth, generateOtp, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateProfInformation, updateProfileInformation, userLoginController, userRegister } from "../controllers/userController";
-import { applyJobCntrl, bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, removeBookmarkCntrl } from "../controllers/jobController";
+import {  bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, removeBookmarkCntrl } from "../controllers/jobController";
+import { applyJobCntrl } from "../controllers/applicationController";
 
 const router=Router()
 

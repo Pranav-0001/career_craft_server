@@ -63,11 +63,8 @@ const jobSchema= new Schema<Job>({
     savedBy:{
         type:Array,
         
-    },
-    appliedBy:{
-        type:Object,
-        
     }
+    
 })
 
 export const jobModel:MongoDBJob=mongoose.connection.model<Document<any, any, any> & Job>('job', jobSchema);

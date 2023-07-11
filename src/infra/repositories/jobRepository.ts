@@ -12,7 +12,6 @@ export type jobRepository = {
     getSingleJob:(id:string)=>Promise<Job>
     saveJob:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
     removeSaved:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
-    userApplyJob:(jobId:string,user:string,appliedOn:string)=>Promise<UpdateWriteOpResult>
     getBookmarked:(userId:string)=>Promise<Job[]>
 }
 export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
@@ -76,17 +75,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
         return res
     }
 
-    const userApplyJob=async (jobId:string,user:string,appliedOn:string)=>{
-        
-        const userId=new mongoose.Types.ObjectId(user)
-        console.log(userId,jobId);
-        const data:applied={user:userId,appliedOn,status:"Applied"}
-        
-        const res=await jobModel.updateOne({_id:jobId},{$push:{appliedBy:data}})
-        
-        return res
-        
-    }
+   
 
     const getJobs = async (page: number, domain: string | null, salary: string | null, type: string | null, sort: string | null): Promise<Job[]> => {
         let skip = (page - 1) * 5
@@ -786,7 +775,6 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
         getSingleJob,
         saveJob,
         removeSaved,
-        userApplyJob,
         getBookmarked
     }
 }

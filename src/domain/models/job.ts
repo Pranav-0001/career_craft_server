@@ -25,6 +25,6 @@ export interface Job {
     status?:boolean
     Employer?: any[];
     savedBy?:ObjectId[]
-    appliedBy?:applied[]
+    
     
 }
