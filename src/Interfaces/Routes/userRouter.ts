@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { auth, generateOtp, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateProfInformation, updateProfileInformation, userLoginController, userRegister } from "../controllers/userController";
 import {  bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, removeBookmarkCntrl } from "../controllers/jobController";
-import { applyJobCntrl } from "../controllers/applicationController";
+import { applyJobCntrl, getAppliedByUserCntrl } from "../controllers/applicationController";
+import { candidateAuth } from "../Middlewares/candidateAuth";
 
 const router=Router()
 
@@ -28,5 +29,6 @@ router.post('/profile-update/:userId',updateProfileInformation)
 router.put('/education-update/:userId',updateEducationInformation)
 router.put('/professional-update/:userId',updateProfInformation)
 router.get('/getuserdata/:userId',getUserDataCntrl)
+router.get('/user-applied-jobs/:userId',candidateAuth,getAppliedByUserCntrl)
 
 export default router

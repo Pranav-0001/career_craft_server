@@ -5,3 +5,9 @@ export const applyJob=(applicationRepository:applicationRepository)=>async(jobId
     const applied=await applicationRepository.addApplication(jobId,empId,userId)
     return applied
 } 
+
+
+export const getApplicationByUserId=(applicationRepository:applicationRepository)=>async(userId:string)=>{
+    const applied=await applicationRepository.getApplicationByUser(userId)
+    return applied
+}

@@ -1,8 +1,10 @@
-import { MongoDBJobApply } from "../Database/applyModel";
-import { JobApplication } from "../../domain/models/jobApply";
+import { MongoDBJobApply, jobApplyModel } from "../Database/applyModel";
+import { JobApplication, JobApplyDetailed } from "../../domain/models/jobApply";
+import mongoose from "mongoose";
 
 export type applicationRepository={
     addApplication:(jobId:string,empId:string,userId:string)=>Promise<JobApplication>
+    getApplicationByUser:(userId:string)=>Promise<JobApplyDetailed[]>
 }
 
 export const applicationRepositoryEmpl=(applyModel:MongoDBJobApply):applicationRepository=>{
@@ -23,7 +25,35 @@ export const applicationRepositoryEmpl=(applyModel:MongoDBJobApply):applicationR
         return appliedjob
     }
 
+    const getApplicationByUser=async(userId:string):Promise<JobApplyDetailed[]>=>{
+        let id=new mongoose.Types.ObjectId(userId)
+        const applied=await jobApplyModel.aggregate([
+            {
+            $match:{userId:id}
+            },
+            {
+                $lookup:{
+                    from:'jobs',
+                    localField:'jobId',
+                    foreignField:'_id',
+                    as:'job'
+                }
+            },
+            {
+                $lookup:{
+                    from:'users',
+                    localField:'empId',
+                    foreignField:'_id',
+                    as:'employer'
+                }
+            }
+        ])
+        return applied
+    }
+
+    
     return {
-        addApplication
+        addApplication,
+        getApplicationByUser
     }
 }

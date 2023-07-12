@@ -63,6 +63,9 @@ const jobSchema= new Schema<Job>({
     savedBy:{
         type:Array,
         
+    },
+    appliedBy:{
+        type:Types.ObjectId
     }
     
 })
