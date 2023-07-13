@@ -11,3 +11,12 @@ export const getApplicationByUserId=(applicationRepository:applicationRepository
     const applied=await applicationRepository.getApplicationByUser(userId)
     return applied
 }
+
+export const getApplicationByEmpId=(applicationRepository:applicationRepository)=>async(empId:string,page:string)=>{
+    const applied=await applicationRepository.getApplicationByEmp(empId,page)
+    return applied
+}
+export const getCountAppEmp=(applicationRepository:applicationRepository)=>async(empId:string)=>{
+    const count = await applicationRepository.getApplicationCountEmp(empId)
+    return count
+}

@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 export type applicationRepository={
     addApplication:(jobId:string,empId:string,userId:string)=>Promise<JobApplication>
     getApplicationByUser:(userId:string)=>Promise<JobApplyDetailed[]>
+    getApplicationByEmp:(userId:string,page:string)=>Promise<JobApplyDetailed[]>
+    getApplicationCountEmp:(EmpId:string)=>Promise<any>
 }
 
 export const applicationRepositoryEmpl=(applyModel:MongoDBJobApply):applicationRepository=>{
@@ -50,10 +52,63 @@ export const applicationRepositoryEmpl=(applyModel:MongoDBJobApply):applicationR
         ])
         return applied
     }
+    const getApplicationByEmp=async(empId:string,page:string):Promise<JobApplyDetailed[]>=>{
+        const skip=(parseInt(page)-1)*10
+        let id=new mongoose.Types.ObjectId(empId)
+
+        const applied = await jobApplyModel.aggregate([
+            {
+              $match: { empId:id }
+            },
+            {
+              $lookup: {
+                from: 'jobs',
+                localField: 'jobId',
+                foreignField: '_id',
+                as: 'job'
+              }
+            },
+            {
+              $lookup: {
+                from: 'users',
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'user'
+              }
+            },
+            {
+              $skip: skip
+            },
+            {
+              $limit: 10
+            }
+          ]);
+
+          return applied
+    }
+
+    const getApplicationCountEmp=async(empId:string):Promise<any>=>{
+        let id=new mongoose.Types.ObjectId(empId)
+
+        const applied = await jobApplyModel.aggregate([
+            {
+              $match: { empId:id }
+            },
+            {
+              $count: 'total'
+            }
+        ])
+        
+        
+        return applied[0].total
+    }
+
 
     
     return {
         addApplication,
-        getApplicationByUser
+        getApplicationByUser,
+        getApplicationByEmp,
+        getApplicationCountEmp
     }
 }
