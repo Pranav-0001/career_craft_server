@@ -1,12 +1,13 @@
 import { MongoDBJobApply, jobApplyModel } from "../Database/applyModel";
 import { JobApplication, JobApplyDetailed } from "../../domain/models/jobApply";
-import mongoose from "mongoose";
+import mongoose, { UpdateWriteOpResult } from "mongoose";
 
 export type applicationRepository={
     addApplication:(jobId:string,empId:string,userId:string)=>Promise<JobApplication>
     getApplicationByUser:(userId:string)=>Promise<JobApplyDetailed[]>
     getApplicationByEmp:(userId:string,page:string)=>Promise<JobApplyDetailed[]>
     getApplicationCountEmp:(EmpId:string)=>Promise<any>
+    updateApplicationEmp:(appId:string,status:string)=>Promise<UpdateWriteOpResult>
 }
 
 export const applicationRepositoryEmpl=(applyModel:MongoDBJobApply):applicationRepository=>{
@@ -103,12 +104,18 @@ export const applicationRepositoryEmpl=(applyModel:MongoDBJobApply):applicationR
         return applied[0].total
     }
 
+    const updateApplicationEmp=async(appId:string,status:string):Promise<UpdateWriteOpResult>=>{
+      const id=new mongoose.Types.ObjectId(appId)
+      const res=await applyModel.updateOne({_id:id},{$set:{status:status}})
+      return res
+    }
 
     
     return {
         addApplication,
         getApplicationByUser,
         getApplicationByEmp,
-        getApplicationCountEmp
+        getApplicationCountEmp,
+        updateApplicationEmp
     }
 }

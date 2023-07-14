@@ -20,3 +20,8 @@ export const getCountAppEmp=(applicationRepository:applicationRepository)=>async
     const count = await applicationRepository.getApplicationCountEmp(empId)
     return count
 }
+
+export const updateApplicationStatus=(applicationRepository:applicationRepository)=>async(appId:string, status:string)=>{
+    const update=await applicationRepository.updateApplicationEmp(appId,status)
+    return update
+}

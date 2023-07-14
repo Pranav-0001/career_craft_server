@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 import userRouter from './src/Interfaces/Routes/userRouter'
 import employerRouter from './src/Interfaces/Routes/employerRouter'
 import adminRouter from './src/Interfaces/Routes/adminRoute'
+import messageRouter from './src/Interfaces/Routes/messageRoute'
+
 import { db } from './src/infra/Database/config'
 
 import cookieParser from 'cookie-parser'
@@ -25,6 +27,7 @@ app.use(cookieParser())
 app.use("/",userRouter)
 app.use("/employer",employerRouter)
 app.use("/admin",adminRouter)
+app.use("/msg",messageRouter)
 
 db()
 app.listen(port , ()=>{

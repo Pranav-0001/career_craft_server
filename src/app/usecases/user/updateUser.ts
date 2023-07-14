@@ -25,3 +25,4 @@ export const getUserInfo=(userRepository:userRepository)=>async(userId:string)=>
     const userInfo=await userRepository.getUserInformation(userId)
     return userInfo
 }
+
