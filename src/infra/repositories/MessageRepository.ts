@@ -18,7 +18,7 @@ export const MsgRepositoryEmpl=(MessageModel:MongoDBMessage):MessageRepository=>
             chat:new mongoose.Types.ObjectId(chatId)
         }
         let message=await MsgModel.create(newChat)
-        message =await message.populate("sender",'firstname lastname username profileImg')   
+        message =await message.populate("sender",'_id firstname lastname username profileImg')   
         message=await message.populate('chat')
         message=await message.populate('chat.users')
 

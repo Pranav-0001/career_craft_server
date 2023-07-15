@@ -8,6 +8,8 @@ import messageRouter from './src/Interfaces/Routes/messageRoute'
 import { db } from './src/infra/Database/config'
 
 import cookieParser from 'cookie-parser'
+import { Socket } from 'socket.io'
+import { newMessageRecieved } from './src/domain/models/chat'
 
 
 
@@ -30,7 +32,41 @@ app.use("/admin",adminRouter)
 app.use("/msg",messageRouter)
 
 db()
-app.listen(port , ()=>{
+const server= app.listen(port , ()=>{
     console.log(`Connected to PORT : ${port}`);
     
 }) 
+const io=require('socket.io')(server , {
+    pingTimeout:60000,
+    cors:{
+        origin:'http://localhost:3000'
+    },
+})
+
+io.on("connection",(socket:any)=>{
+    console.log("Connected to socket.IO");
+    socket.on('setup',(userId:string)=>{
+        console.log(userId);
+        
+        socket.join(userId)
+        socket.emit('connected')
+    })
+
+    socket.on('join chat',(room:string)=>{
+        socket.join(room)
+        console.log("User Joined room : " + room);  
+    })
+
+    socket.on('new message',(newMessageRecieved:newMessageRecieved)=>{
+        let chat=newMessageRecieved.chat
+        
+        
+        if(!chat.users) return console.log("Chat.users not defiend");
+        chat.users.forEach((user)=>{
+            if(user._id === newMessageRecieved.sender._id) return
+            socket.in(user._id).emit('message recieved',newMessageRecieved)
+        })
+          
+    })
+    
+})
