@@ -3,6 +3,8 @@ import { EmployerRegister, generateOtp, getEmployerJobs, postJob, removeEmpRefre
 import { empAuth } from "../Middlewares/empAuth";
 import { getApplicationByEmpIdCntrl } from "../controllers/applicationController";
 import { acceptApplicationCntroller, fetchEmpChatsCntrlr } from "../controllers/chatController";
+import { addQuestionCntrl, getAllQuestionsCntrl } from "../controllers/questionController";
+import { generateExam, getExamcntrl } from "../controllers/ExamController";
 const router=Router()
 
 
@@ -14,6 +16,10 @@ router.get("/employer-jobs/:id",empAuth,getEmployerJobs)
 router.get ('/getapplicationsbyemp',empAuth,getApplicationByEmpIdCntrl)
 router.post('/accept-application',acceptApplicationCntroller)
 router.get('/fetchChats/:empId',fetchEmpChatsCntrlr)
+router.post('/add-question',addQuestionCntrl)
+router.get('/getquestions',getAllQuestionsCntrl)
+router.post('/create-exam',generateExam)
+
 
 
 
