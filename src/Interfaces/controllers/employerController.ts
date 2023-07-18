@@ -4,7 +4,7 @@ import {jobModel} from '../../infra/Database/jobModel'
 import { UserRepositoryImpl } from "../../infra/repositories/userRepository";
 import { generateEmpSignupOtp } from "../../app/usecases/employer/generateOtpEmp";
 import { signupEmp, verifyRmployer } from "../../app/usecases/employer/SignupEmp";
-import { addJobEmp } from "../../app/usecases/employer/postjob";
+import { EditJobEmp, addJobEmp } from "../../app/usecases/employer/postjob";
 import { JobRepositoryImpl } from "../../infra/repositories/jobRepository";
 import {getEmpJobs} from '../../app/usecases/employer/getEmpJobs'
 import jsonwebtoken from 'jsonwebtoken'
@@ -54,6 +54,19 @@ export const postJob=async (req:Request,res:Response)=>{
     try{
         const result=await addJobEmp(jobRepository)(title,category,qualification,experience,deadline,salaryType,desc,jobType,fixedSalary,EmployerId,salaryFrom,salaryTo)
         res.json({status:true,jobData:result})
+    }catch(err){
+        res.status(500).json({status:"server error"})
+    }
+}
+export const editJob=async (req:Request,res:Response)=>{
+    const {job}= req.params
+    const {title,category,qualification,experience,deadline,salaryType,desc,jobType,salaryFrom,salaryTo,fixedSalary,EmployerId}=req.body as Job
+    try{
+        const result=await EditJobEmp(jobRepository)(title,category,qualification,experience,deadline,salaryType,desc,jobType,fixedSalary,EmployerId,salaryFrom,salaryTo,job)
+        console.log(result);
+        
+        res.json({status:true})
+        
     }catch(err){
         res.status(500).json({status:"server error"})
     }

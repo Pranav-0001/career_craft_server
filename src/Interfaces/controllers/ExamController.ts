@@ -58,7 +58,7 @@ export const setAttended=async(req:Request,res:Response)=>{
 
 export const submitExam=async(req:Request,res:Response)=>{
     const {answer,exam}=req.body
-    const examData:examType|null=await getExamById(examRepository)(exam)
+    
     
     const data=await submitAnswer(examRepository)(answer,exam)
     res.json({data,status:true})

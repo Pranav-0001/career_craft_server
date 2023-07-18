@@ -15,6 +15,8 @@ export const getJobsCount=(jobrepository:jobRepository)=>async(domain:string|nul
 
 export const getJobData=(jobrepository:jobRepository)=>async(id:string)=>{
     const jobData=await jobrepository.getSingleJob(id)
+    
+    
     return jobData
 }
 

@@ -47,9 +47,9 @@ export const getSingleJOb=async(req:Request,res:Response)=>{
     try {
         const {id}=req.params
         const jobData:any=await getJobData(jobRepository)(id)
-       
-        
-        res.status(201).json({job:jobData[0]})
+       if(jobData) res.status(201).json({job:jobData[0]})
+       else res.status(201).json({job:false})
+
         
     } catch (error) {
         

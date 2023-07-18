@@ -8,7 +8,7 @@ export type examRepository={
     createExam:(quesions:QuestionType[],candidate:string,employer:string)=>Promise<examType>
     getExam:(id:string)=>Promise<examType | null>
     setAttended:(id:string,time:string)=>Promise<UpdateWriteOpResult>
-    setAnswer:(answers:{ queId?: mongoose.Types.ObjectId, userAns?: string }[],examId:string)=>Promise<UpdateWriteOpResult>
+    setAnswer:(answers:{ queId?: mongoose.Types.ObjectId, userAns?: string }[],examId:string,mark:number)=>Promise<UpdateWriteOpResult>
 }
 
 export const ExamRepositoryImpl = (examModel:MongoDBExam):examRepository=>{
@@ -32,9 +32,9 @@ export const ExamRepositoryImpl = (examModel:MongoDBExam):examRepository=>{
         const res=await examModel.updateOne({_id:new mongoose.Types.ObjectId(id)},{$set:{attended:true,startedAt:time}})
         return res
     }
-    const setAnswer=async(answers:{ queId?: mongoose.Types.ObjectId, userAns?: string }[],examId:string):Promise<UpdateWriteOpResult>=>{
+    const setAnswer=async(answers:{ queId?: mongoose.Types.ObjectId, userAns?: string }[],examId:string,mark:number):Promise<UpdateWriteOpResult>=>{
         let id=new mongoose.Types.ObjectId(examId)
-        const res= await examModel.updateOne({_id:id},{$set:{answers:answers}})
+        const res= await examModel.updateOne({_id:id},{$set:{answers:answers,mark}})
         return res
     }
     

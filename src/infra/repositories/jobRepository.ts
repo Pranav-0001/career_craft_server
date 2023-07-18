@@ -5,11 +5,12 @@ import mongoose, { UpdateWriteOpResult,ObjectId } from "mongoose";
 
 export type jobRepository = {
     addJob: (jobData: Job) => Promise<Job>;
+    editJob: (jobData: Job,job:string) => Promise<UpdateWriteOpResult>;
     getEmpJobs: (id: string) => Promise<Job[]>
     getJobs: (page: number, domain: string | null, salary: string | null, type: string | null, sort: string | null) => Promise<Job[]>
     getDomains: () => Promise<string[]>
     getJobsCount: (domain: string | null, salary: string | null, type: string | null) => Promise<number>
-    getSingleJob:(id:string)=>Promise<Job>
+    getSingleJob:(id:string)=>Promise<Job[]|null>
     saveJob:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
     removeSaved:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
     getBookmarked:(userId:string)=>Promise<Job[]>
@@ -20,6 +21,26 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
     const addJob = async (job: Job): Promise<Job> => {
         const createdJob = await jobModel.create(job)
         return createdJob.toObject()
+    }
+    const editJob=async (jobData:Job,job:string)=>{
+        const id=new mongoose.Types.ObjectId(job)
+        console.log({jobData});
+        
+        const update= await jobModel.updateOne({_id:id},{$set:{
+            title:jobData.title,
+            category:jobData.category,
+            salaryType:jobData.salaryType,
+            fixedSalary:jobData.fixedSalary,
+            salaryFrom:jobData.salaryFrom,
+            salaryTo:jobData.salaryTo,
+            qualification:jobData.qualification,
+            experience:jobData.experience,
+            deadline:jobData.deadline,
+            jobType:jobData.deadline,
+            desc:jobData.desc
+        }})
+
+        return update
     }
 
     const getEmpJobs = async (id: string): Promise<Job[]> => {
@@ -45,8 +66,8 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
         return jobs
     }
 
-    const getSingleJob=async(id:string):Promise<any>=>{
-        
+    const getSingleJob=async(id:string):Promise<Job[]|null>=>{
+        try{
         const _id=new mongoose.Types.ObjectId(id)
         const data=await jobModel.aggregate([{
             $match:{_id}
@@ -60,8 +81,13 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
             }
         }
         ])
-
+        
+        
         return data
+
+        }catch(err){
+            return null
+        }
     }
 
     const saveJob=async(jobId:string,user:string)=>{
@@ -783,6 +809,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
         saveJob,
         removeSaved,
         getBookmarked,
-        addToApplied
+        addToApplied,
+        editJob
     }
 }
