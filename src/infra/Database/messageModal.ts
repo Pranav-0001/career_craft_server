@@ -15,6 +15,14 @@ const MsgSchema = new Schema<Message>({
     chat:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'chat'
+    },
+    isExam:{
+        type:'boolean',
+        default:false
+    },
+    Exam:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'exam'
     }
 },
 {

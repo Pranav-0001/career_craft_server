@@ -12,6 +12,10 @@ export const getExamById = (examRepository: examRepository) => async (examId: st
     const exam = await examRepository.getExam(examId)
     return exam
 }
+export const getResById = (examRepository: examRepository) => async (examId: string) => {
+    const exam = await examRepository.getRes(examId)
+    return exam
+}
 
 export const setExamAttended = (examRepository: examRepository) => async (examId: string, time: string) => {
 

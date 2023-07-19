@@ -10,5 +10,6 @@ export interface examType{
     attended?:boolean
     submitted?:boolean
     date?:string,
-    mark?:number
+    mark?:number,
+    question?:any
 }

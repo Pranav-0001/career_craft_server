@@ -5,7 +5,7 @@ import { examModel } from "../../infra/Database/examModel"
 import { QuestionRepositoryImpl } from "../../infra/repositories/questionRepository"
 import { QuestionModel } from "../../infra/Database/questionModel"
 import { QuestionType } from "../../domain/models/question"
-import { generateTest, getExamById, setExamAttended, submitAnswer } from "../../app/usecases/exam/exam"
+import { generateTest, getExamById, getResById, setExamAttended, submitAnswer } from "../../app/usecases/exam/exam"
 import { examType } from "../../domain/models/exam"
 
 const examRepository=ExamRepositoryImpl(examModel)
@@ -47,6 +47,17 @@ export const getExamcntrl=async(req:Request,res:Response)=>{
      
      res.json(examData)
 }
+export const getRestrl=async(req:Request,res:Response)=>{
+
+    const {exam}=req.params
+    const examData=await getResById(examRepository)(exam)
+    
+    
+   
+    
+    if(examData) res.json(examData)
+    else res.json(examData)
+}
 
 export const setAttended=async(req:Request,res:Response)=>{
     const {exam} =req.body
@@ -58,9 +69,12 @@ export const setAttended=async(req:Request,res:Response)=>{
 
 export const submitExam=async(req:Request,res:Response)=>{
     const {answer,exam}=req.body
+    console.log({answer,exam});
     
     
     const data=await submitAnswer(examRepository)(answer,exam)
+    // console.log(data);
+    
     res.json({data,status:true})
     
 }

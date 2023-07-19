@@ -3,8 +3,8 @@ import { MessageRepository } from "../../../infra/repositories/MessageRepository
 
 
 
-export const sendingMessage=(MessageRepository:MessageRepository)=>async(chatId:string,senderId:string,content:string)=>{
-   const message=await MessageRepository.sendMsg(chatId,senderId,content)
+export const sendingMessage=(MessageRepository:MessageRepository)=>async(chatId:string,senderId:string,content:string,isExam?:boolean)=>{
+   const message=await MessageRepository.sendMsg(chatId,senderId,content,isExam)
    return message
 }
 

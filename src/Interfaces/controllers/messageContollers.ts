@@ -7,8 +7,8 @@ import { MsgModel } from "../../infra/Database/messageModal"
 const MsgRepository=MsgRepositoryEmpl(MsgModel)
 
 export const sendMessage=async(req:Request,res:Response)=>{
-    const {content,chatId,senderId}=req.body
-    const msg=await sendingMessage(MsgRepository)(chatId,senderId,content)
+    const {content,chatId,senderId,isExam}=req.body
+    const msg=await sendingMessage(MsgRepository)(chatId,senderId,content,isExam)
     res.json({msg})
 
 }

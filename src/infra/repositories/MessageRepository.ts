@@ -6,28 +6,31 @@ import { User } from "../../domain/models/user";
 import { chatModel } from "../Database/chatModel";
 
 export type MessageRepository={
-    sendMsg:(chatId:string,sender:string,content:string)=>Promise<Message >
+    sendMsg:(chatId:string,sender:string,content:string,isExam?:boolean)=>Promise<Message >
     getMsgsByChatId:(chatId:string)=>Promise<Message[]>
 }
 
 export const MsgRepositoryEmpl=(MessageModel:MongoDBMessage):MessageRepository=>{
-    const sendMsg=async(chatId:string,sender:string,content:string):Promise<Message >=>{
+    const sendMsg=async(chatId:string,sender:string,content:string,isExam?:boolean):Promise<Message >=>{
         const newChat:Message={
             sender:new mongoose.Types.ObjectId(sender),
             content,
-            chat:new mongoose.Types.ObjectId(chatId)
+            chat:new mongoose.Types.ObjectId(chatId),
+            isExam,
+            Exam:isExam ?  new mongoose.Types.ObjectId(content) : undefined
         }
         let message=await MsgModel.create(newChat)
         message =await message.populate("sender",'_id firstname lastname username profileImg')   
         message=await message.populate('chat')
         message=await message.populate('chat.users')
+        message=await message.populate('Exam')
 
         await chatModel.updateOne({_id:new mongoose.Types.ObjectId(chatId)},{$set:{latestMessage:message}})
 
         return message
     }
     const getMsgsByChatId=async(chatId:string):Promise<Message[]>=>{
-        const messags=await MessageModel.find({chat:new mongoose.Types.ObjectId(chatId)}).populate("sender",'firstname lastname username profileImg')
+        const messags=await MessageModel.find({chat:new mongoose.Types.ObjectId(chatId)}).populate("sender",'firstname lastname username profileImg').populate('Exam')
         .populate('chat')
         return messags
     }

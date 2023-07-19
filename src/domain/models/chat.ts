@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { User } from "./user";
+import { examType } from "./exam";
 
 export interface Chat{
     chatName:string,
@@ -11,7 +12,9 @@ export interface Chat{
 export interface Message{
     sender:mongoose.Types.ObjectId
     content:string
-    chat:mongoose.Types.ObjectId
+    chat:mongoose.Types.ObjectId,
+    isExam?:boolean
+    Exam?:mongoose.Types.ObjectId
 }
 
 export interface newMessageRecieved{
