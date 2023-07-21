@@ -69,4 +69,11 @@ io.on("connection",(socket:any)=>{
           
     })
     
+    socket.on('offer',({offer,userId}:{ offer: RTCSessionDescriptionInit,userId:string })=>{
+        console.log({offer});
+        socket.broadcast.emit('offer', offer);
+    })
+
+    
+   
 })

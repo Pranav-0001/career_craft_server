@@ -14,7 +14,8 @@ export interface Message{
     content:string
     chat:mongoose.Types.ObjectId,
     isExam?:boolean
-    Exam?:mongoose.Types.ObjectId
+    Exam?:mongoose.Types.ObjectId,
+    isVideo?:boolean
 }
 
 export interface newMessageRecieved{

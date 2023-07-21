@@ -6,11 +6,11 @@ export type MongoDBExam=Model<Document<any,any,any>&examType>;
 const ExamSchema = new Schema<examType>({
     candidate:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'users'
+        ref:'user'
     },
     employer:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'users'
+        ref:'user'
     },
     questions:{
         type:Array,

@@ -10,6 +10,7 @@ export type examRepository={
     getRes:(id:string)=>Promise<examType[] | null>
     setAttended:(id:string,time:string)=>Promise<UpdateWriteOpResult>
     setAnswer:(answers:{ queId?: mongoose.Types.ObjectId, userAns?: string }[],examId:string,mark:number)=>Promise<UpdateWriteOpResult>
+    getCandidate:(id:string)=>Promise<examType|null>
 }
 
 export const ExamRepositoryImpl = (examModel:MongoDBExam):examRepository=>{
@@ -64,13 +65,19 @@ export const ExamRepositoryImpl = (examModel:MongoDBExam):examRepository=>{
         const res= await examModel.updateOne({_id:id},{$set:{answers:answers,mark,submitted:true}})
         return res
     }
-    
+    const getCandidate=async (id:string):Promise<examType | null>=>{
+        const examId=new mongoose.Types.ObjectId(id)
+        const candidate=await examModel.findOne({_id:examId}).populate('candidate')
+        return candidate
+
+    }
 
     return {
         createExam,
         getExam,
         setAttended,
         setAnswer,
-        getRes
+        getRes,
+        getCandidate
     }
 }

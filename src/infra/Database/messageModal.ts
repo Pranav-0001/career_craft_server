@@ -23,6 +23,9 @@ const MsgSchema = new Schema<Message>({
     Exam:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'exam'
+    },
+    isVideo:{
+        type:'boolean'
     }
 },
 {

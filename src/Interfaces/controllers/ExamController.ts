@@ -5,7 +5,7 @@ import { examModel } from "../../infra/Database/examModel"
 import { QuestionRepositoryImpl } from "../../infra/repositories/questionRepository"
 import { QuestionModel } from "../../infra/Database/questionModel"
 import { QuestionType } from "../../domain/models/question"
-import { generateTest, getExamById, getResById, setExamAttended, submitAnswer } from "../../app/usecases/exam/exam"
+import { generateTest, getCandidateFromExam, getExamById, getResById, setExamAttended, submitAnswer } from "../../app/usecases/exam/exam"
 import { examType } from "../../domain/models/exam"
 
 const examRepository=ExamRepositoryImpl(examModel)
@@ -51,11 +51,12 @@ export const getRestrl=async(req:Request,res:Response)=>{
 
     const {exam}=req.params
     const examData=await getResById(examRepository)(exam)
+    const candidate = await getCandidateFromExam(examRepository)(exam)
     
     
    
     
-    if(examData) res.json(examData)
+    if(examData) res.json({examData,candidate})
     else res.json(examData)
 }
 
