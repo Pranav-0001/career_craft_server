@@ -65,6 +65,10 @@ const userSchema=new Schema<User>({
     },
     professional:{
         type:'object'
+    },
+    isPrime:{
+        type:'boolean',
+        default:false
     }
 
 })

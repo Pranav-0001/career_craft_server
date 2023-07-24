@@ -15,4 +15,5 @@ export interface User {
     profile?:object 
     education?:object 
     professional?:object
+    isPrime?:boolean
 }

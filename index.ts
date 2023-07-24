@@ -40,11 +40,12 @@ const io=require('socket.io')(server , {
     pingTimeout:60000,
     cors:{
         origin:'http://localhost:3000'
+        // origin:'http://10.4.3.148:3000'
     },
 })
 
 io.on("connection",(socket:any)=>{
-    console.log("Connected to socket.IO");
+    
     socket.on('setup',(userId:string)=>{
         console.log(userId);
         
@@ -68,10 +69,31 @@ io.on("connection",(socket:any)=>{
         })
           
     })
+
     
-    socket.on('offer',({offer,userId}:{ offer: RTCSessionDescriptionInit,userId:string })=>{
-        console.log({offer});
-        socket.broadcast.emit('offer', offer);
+
+    socket.on('join:video',({room,user}:{room:string,user:string})=>{
+        socket.join(room)
+        io.to(room).emit('joined',user)
+        console.log(`User ${user} joined video : ${room}`);
+    })
+    
+    socket.on('offer',({offer,roomId}:{ offer: RTCSessionDescriptionInit,roomId:string })=>{
+       io.to(roomId).emit('offer:recieved',offer)
+    })
+
+    socket.on('answer',({answer,roomId}:{ answer: RTCSessionDescriptionInit,roomId:string })=>{
+        console.log(answer,roomId);
+       io.to(roomId).emit('answer:recieved',answer)
+       
+       
+
+       
+    })
+
+    socket.on('ICE',({candidate,roomId}:{candidate:any,roomId:string})=>{
+        console.log({candidate,roomId});
+        io.to(roomId).emit('candidate',candidate)
     })
 
     
