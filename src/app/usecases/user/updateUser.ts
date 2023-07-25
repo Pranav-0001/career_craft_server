@@ -26,3 +26,8 @@ export const getUserInfo=(userRepository:userRepository)=>async(userId:string)=>
     return userInfo
 }
 
+export const userUpdateSub=(userRepository:userRepository)=>async(userId:string)=>{
+    const userInfo=await userRepository.updateSub(userId)
+    return userInfo
+}
+

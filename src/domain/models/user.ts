@@ -16,4 +16,7 @@ export interface User {
     education?:object 
     professional?:object
     isPrime?:boolean
+    subscribedDate?:string
+    Expiry?:string 
+    subscriptionStatus?:string
 }

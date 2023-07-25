@@ -69,6 +69,15 @@ const userSchema=new Schema<User>({
     isPrime:{
         type:'boolean',
         default:false
+    },
+    subscribedDate:{
+        type:'string'
+    },
+    Expiry:{
+        type:'string'
+    },
+    subscriptionStatus:{
+        type:"string"
     }
 
 })

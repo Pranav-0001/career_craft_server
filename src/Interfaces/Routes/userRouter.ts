@@ -4,6 +4,7 @@ import {  bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb
 import { applyJobCntrl, getAppliedByUserCntrl } from "../controllers/applicationController";
 import { candidateAuth } from "../Middlewares/candidateAuth";
 import { getExamcntrl, setAttended, submitExam } from "../controllers/ExamController";
+import { addSubscriptionCntrl } from "../controllers/subscription.Controller";
 
 const router=Router()
 
@@ -34,5 +35,6 @@ router.get('/user-applied-jobs/:userId',candidateAuth,getAppliedByUserCntrl)
 router.get('/get-exam/:exam',getExamcntrl)
 router.post('/setattended',setAttended)
 router.post('/submitexam',submitExam)
+router.post('/add-subscription',addSubscriptionCntrl)
 
 export default router

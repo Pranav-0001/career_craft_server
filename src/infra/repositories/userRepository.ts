@@ -1,4 +1,4 @@
-import { UpdateWriteOpResult } from "mongoose";
+import mongoose, { UpdateWriteOpResult } from "mongoose";
 import { User } from "../../domain/models/user";
 import { MongoDBUser } from "../Database/userModel";
 
@@ -14,6 +14,7 @@ export type userRepository={
     updateEducationInfo:(education:string,result:string,institute:string,starting:string,ending:string,userId:string)=>Promise<UpdateWriteOpResult>
     updateProfessionalInfo:(company:string,designation:string,experience:string,userId:string)=>Promise<UpdateWriteOpResult>
     getUserInformation:(userId:string)=>Promise<User |null>
+    updateSub:(userId:string)=>Promise<UpdateWriteOpResult>
 }
 
 export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
@@ -116,6 +117,26 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         return response
     }
 
+    const updateSub=async(userId:string)=>{
+        
+        function formatDateToDdMmYyyy(date:Date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+          }
+          
+          function getDateAfterDays(days:number) {
+            const currentDate = new Date();
+            const futureDate = new Date(currentDate);
+            futureDate.setDate(futureDate.getDate() + days);
+            return futureDate;
+          }
+        const id=new mongoose.Types.ObjectId(userId)
+        const res=await userModel.updateOne({_id:id},{$set:{isPrime:true,subscribedDate:formatDateToDdMmYyyy(new Date()),subscriptionStatus:'subscribed',Expiry:formatDateToDdMmYyyy(getDateAfterDays(30)) }})
+        return res
+    }
+
     
     return {
         findByEmail ,
@@ -128,6 +149,7 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         updateProfileInfo,
         updateEducationInfo,
         updateProfessionalInfo,
-        getUserInformation
+        getUserInformation,
+        updateSub
     }
 }
