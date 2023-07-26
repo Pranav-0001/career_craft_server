@@ -78,6 +78,9 @@ const userSchema=new Schema<User>({
     },
     subscriptionStatus:{
         type:"string"
+    },
+    mockPer:{
+        type:'number'
     }
 
 })

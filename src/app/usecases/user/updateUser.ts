@@ -31,3 +31,14 @@ export const userUpdateSub=(userRepository:userRepository)=>async(userId:string)
     return userInfo
 }
 
+export const updateUserPoint=(userRepository:userRepository)=>async(userId:string,per:number)=>{
+    const userInfo=await userRepository.updatePoint(userId,per)
+    return userInfo
+}
+
+export const expiredSubs=(userRepository:userRepository)=>async(userId:string)=>{
+    const userInfo=await userRepository.updateExp(userId)
+    return userInfo
+}
+
+

@@ -18,5 +18,6 @@ export interface User {
     isPrime?:boolean
     subscribedDate?:string
     Expiry?:string 
-    subscriptionStatus?:string
+    subscriptionStatus?:string,
+    mockPer?:number
 }

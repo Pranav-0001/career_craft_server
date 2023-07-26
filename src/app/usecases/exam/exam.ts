@@ -28,7 +28,7 @@ export const setExamAttended = (examRepository: examRepository) => async (examId
 
 }
 
-export const submitAnswer = (examRepository: examRepository) => async (answer: { queId?: string, userAns?: string, status?: true }[], exam: string) => {
+export const submitAnswer = (examRepository: examRepository) => async (answer: { queId?: string, userAns?: string, status?: boolean }[], exam: string) => {
 
     const answers = answer.map((obj) => { return { ...obj, queId: new mongoose.Types.ObjectId(obj.queId) } })
     const mark = answers.reduce((val, currObj) => {

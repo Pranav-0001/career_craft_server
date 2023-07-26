@@ -15,6 +15,8 @@ export type userRepository={
     updateProfessionalInfo:(company:string,designation:string,experience:string,userId:string)=>Promise<UpdateWriteOpResult>
     getUserInformation:(userId:string)=>Promise<User |null>
     updateSub:(userId:string)=>Promise<UpdateWriteOpResult>
+    updatePoint:(userId:string,per:number)=>Promise<UpdateWriteOpResult>
+    updateExp:(userId:string)=>Promise<UpdateWriteOpResult>
 }
 
 export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
@@ -137,6 +139,19 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         return res
     }
 
+    const updatePoint=async(user:string,per:number)=>{
+        const id=new mongoose.Types.ObjectId(user)
+        const userData=await userModel.updateOne({_id:id},{$set:{mockPer:per}})
+        return userData
+    }
+
+    const updateExp=async(user:string)=>{
+        const id=new mongoose.Types.ObjectId(user)
+        const userData=await userModel.updateOne({_id:id},{$set:{subscriptionStatus:'Expired',isPrime:false}})
+        return userData
+
+
+    }
     
     return {
         findByEmail ,
@@ -150,6 +165,8 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         updateEducationInfo,
         updateProfessionalInfo,
         getUserInformation,
-        updateSub
+        updateSub,
+        updatePoint,
+        updateExp
     }
 }
