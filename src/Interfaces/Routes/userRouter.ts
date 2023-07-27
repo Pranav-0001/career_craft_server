@@ -6,6 +6,7 @@ import { candidateAuth } from "../Middlewares/candidateAuth";
 import { getExamcntrl, setAttended, submitExam } from "../controllers/ExamController";
 import { addSubscriptionCntrl } from "../controllers/subscription.Controller";
 import { CreateMockTestCntrl, getMockTestCntrl, setMockAttendedCntrl, submitMockAnswerCntrl } from "../controllers/mockTestController";
+import { addPubilcQuestion, ansPublicQuestion, getPublicQuestion, getPublicQuestions } from "../controllers/publicQuestion";
 
 const router=Router()
 
@@ -42,5 +43,9 @@ router.get('/get-Mockexam/:id',getMockTestCntrl)
 router.post('/setmockattended',setMockAttendedCntrl)
 router.post('/submitmocktest',submitMockAnswerCntrl)
 router.get('/premiumpage/:user',getPremiumPageData)
+router.post('/addpublicquestion',addPubilcQuestion)
+router.get('/getpublicquestions',getPublicQuestions)
+router.get('/getPublicQuestion/:id',getPublicQuestion)
+router.post('/postAnswerPublicQuestion/:id',ansPublicQuestion)
 
 export default router
