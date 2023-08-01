@@ -1,8 +1,8 @@
 import { Request,Response } from "express";
-import { addAnsUserId, askPublic, getPQueById, getPQues } from "../../app/usecases/PublicQue";
+import { UnlikeQuestionWithId, addAnsUserId, askPublic, getPQueById, getPQues, getQueByUser, likeQuestionWithId, updatePublicQuestion } from "../../app/usecases/PublicQue";
 import { publicQuestionRepositoryImpl } from "../../infra/repositories/PublicQueRepository";
 import { PublicQueModel } from "../../infra/Database/PublicQuestionModel";
-import { ansPublic } from "../../app/usecases/PublicAns/publicAns";
+import { GetmyAns, ansPublic, getAnsByQid, getAnsByUser, likeAnswer, undolikeAnswer, updateMyans } from "../../app/usecases/PublicAns/publicAns";
 import { publicAnswerRepositoryImpl } from "../../infra/repositories/PublicAnsRepository";
 import { PublicAnsModel } from "../../infra/Database/PublicAnswer";
 
@@ -66,4 +66,110 @@ export const ansPublicQuestion=async(req:Request,res:Response)=>{
     } catch (error) {
         
     }
+}
+
+export const getMyAns=async(req:Request,res:Response)=>{
+    try {
+        const {id}=req.params
+        const userId=req.query.userId as string
+      
+        
+        
+        const data=await GetmyAns(publicAnsRepository)(id,userId)
+       
+        res.json(data)
+    } catch (error) {
+        
+    }
+}
+
+export const editMyAns=async(req:Request,res:Response)=>{
+    try {
+        const {ansId,answer,code}=req.body
+        
+        
+        const data=await updateMyans(publicAnsRepository)(ansId,answer,code)
+        res.json(data)
+    } catch (error) {
+        
+    }
+}
+
+export const getPublicAnswersById=async(req:Request,res:Response)=>{
+    try {
+        const {id} =req.params
+        const data=await getAnsByQid(publicAnsRepository)(id)
+        res.json(data)
+    } catch (error) {
+        
+    }
+}
+
+export const answerlikeCntrl=async(req:Request,res:Response)=>{
+    try {
+        const {ansId,userId}=req.body
+        const data=await likeAnswer(publicAnsRepository)(ansId,userId)
+        res.json(data)
+
+    } catch (error) {
+        
+    }
+}
+
+export const undoAnslikeCntrl=async(req:Request,res:Response)=>{
+    try {
+        const {ansId,userId}=req.body
+        const data=await undolikeAnswer(publicAnsRepository)(ansId,userId)
+        res.json(data)
+
+    } catch (error) {
+        
+    }
+}
+
+export const questionLike=async(req:Request,res:Response)=>{
+    try {
+        const {qId,userId}=req.body
+        
+        
+        const data=await likeQuestionWithId(publicQuestionRepository)(qId,userId)
+        res.json(data)
+    } catch (error) {
+         
+    }
+}
+
+export const questionUnLike=async(req:Request,res:Response)=>{
+    try {
+        const {qId,userId}=req.body
+        const data=await UnlikeQuestionWithId(publicQuestionRepository)(qId,userId)
+        res.json(data)
+    } catch (error) {
+        
+    }
+}
+
+export const getmypublicquestions=async(req:Request,res:Response)=>{
+    try {
+        const {id}=req.params
+        const questions=await getQueByUser(publicQuestionRepository)(id)
+        res.json(questions)
+    } catch (error) {
+        
+    }
+}
+
+export const getmypublicanswers=async(req:Request,res:Response)=>{
+    const {id}=req.params
+    const answers=await getAnsByUser(publicAnsRepository)(id)
+    res.json(answers)
+}
+
+export const updateQueCntrl=async(req:Request,res:Response)=>{
+    const {qId,title,language,question,code}=req.body
+    
+    
+    const data=await updatePublicQuestion(publicQuestionRepository)(qId,title,language,question,code)
+    res.json(data)
+    
 }

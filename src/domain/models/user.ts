@@ -20,4 +20,15 @@ export interface User {
     Expiry?:string 
     subscriptionStatus?:string,
     mockPer?:number
+    facebook?:string
+    instagram?:string
+    linkedIn?:string
+    gitHub?:string
+}
+
+export interface socialType{
+    facebook?:string
+    instagram?:string
+    linkedIn?:string
+    gitHub?:string
 }

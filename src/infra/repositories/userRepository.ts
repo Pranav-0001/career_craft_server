@@ -1,5 +1,5 @@
 import mongoose, { UpdateWriteOpResult } from "mongoose";
-import { User } from "../../domain/models/user";
+import { User, socialType } from "../../domain/models/user";
 import { MongoDBUser } from "../Database/userModel";
 
 export type userRepository={
@@ -17,6 +17,8 @@ export type userRepository={
     updateSub:(userId:string)=>Promise<UpdateWriteOpResult>
     updatePoint:(userId:string,per:number)=>Promise<UpdateWriteOpResult>
     updateExp:(userId:string)=>Promise<UpdateWriteOpResult>
+    updateUserProfile:(userId:string,username:string,profileImg:string,social?:socialType)=>Promise<UpdateWriteOpResult>
+    getUsersCount:()=>Promise<{number:number,premium:number,emp:number}>
 }
 
 export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
@@ -152,6 +154,27 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
 
 
     }
+
+    const updateUserProfile=async(userId:string,username:string,profileImg:string,social?:socialType)=>{
+        const id=new mongoose.Types.ObjectId(userId)
+        const data=await userModel.updateOne({_id:id},{$set:{
+            username:username,
+            facebook:social?.facebook,
+            instagram:social?.instagram,
+            linkedIn:social?.linkedIn,
+            gitHub:social?.gitHub,
+            profileImg:profileImg
+        }})
+        return data
+    }
+
+    const getUsersCount=async()=>{
+        const number=await userModel.countDocuments()
+        const premium=await userModel.countDocuments({isPrime:true})
+        const emp=await userModel.countDocuments({role:'employer'})
+        
+        return {number,premium,emp}
+    }
     
     return {
         findByEmail ,
@@ -167,6 +190,8 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         getUserInformation,
         updateSub,
         updatePoint,
-        updateExp
+        updateExp,
+        updateUserProfile,
+        getUsersCount
     }
 }

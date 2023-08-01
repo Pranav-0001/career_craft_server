@@ -7,15 +7,35 @@ import { generateSignupOtp } from "../../app/usecases/user/generateOtp";
 import jsonwebtoken, { JwtPayload } from 'jsonwebtoken'
 import { validate, validateRefresh } from "../../utils/validateJWT";
 import { Employers, Nonpremium, Premium } from "../../app/usecases/admin/getUsers";
-import { expiredSubs, getUserInfo, updateBasic, updateEducation, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
+import { expiredSubs, getUserInfo, updateBasic, updateEducation, updateMyProfile, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
 import { getMockExamById, getMockLastExamByUserId } from "../../app/usecases/exam/MockTest";
 import { MockExamRepositoryImpl } from "../../infra/repositories/mockExamRepository";
 import { MockeTestModel } from "../../infra/Database/mockTestModel";
 import { validSubsription } from "../../utils/subscription";
+import { getApplicationByUserId, getLast5ApplicationByUserId, getMyApplications } from "../../app/usecases/user/jobApplication";
+import { applicationRepositoryEmpl } from "../../infra/repositories/applicationRepository";
+import { jobApplyModel } from "../../infra/Database/applyModel";
+import { mySavedJobCount } from "../../app/usecases/user/getJobs";
+import { JobRepositoryImpl } from "../../infra/repositories/jobRepository";
+import { jobModel } from "../../infra/Database/jobModel";
+import { chatCount } from "../../app/usecases/Chat/Chat";
+import { chatRepositoryEmpl } from "../../infra/repositories/chatRepository";
+import { chatModel } from "../../infra/Database/chatModel";
+import { getMyLAS } from "../../app/usecases/PublicAns/publicAns";
+import { publicAnswerRepositoryImpl } from "../../infra/repositories/PublicAnsRepository";
+import { PublicAnsModel } from "../../infra/Database/PublicAnswer";
 
 const db = userModel;
 const userRepository = UserRepositoryImpl(db)
 const mockExamRepository = MockExamRepositoryImpl(MockeTestModel)
+const applyRepository = applicationRepositoryEmpl(jobApplyModel)
+const jobRepository=JobRepositoryImpl(jobModel)
+const chatRepository=chatRepositoryEmpl(chatModel)
+const publicAnsRepository=publicAnswerRepositoryImpl(PublicAnsModel)
+
+
+
+
 
 
 export const userLoginController = async (req: Request, res: Response) => {
@@ -210,7 +230,33 @@ export const getPremiumPageData = async (req: Request, res: Response) => {
         res.json({ user: result, highscore, mockTests })
     }else{
         const updateUser=await expiredSubs(userRepository)(user)
+        res.json({expired:true})
     }
 
 
+}
+
+export const getDashboardData=async (req: Request, res: Response)=>{
+    try {
+        const {id} = req.params
+        const applications=await getMyApplications(applyRepository)(id)
+        const saved=await mySavedJobCount(jobRepository)(id)
+        const chat=await chatCount(chatRepository)(id)
+        const LAS=await getMyLAS(publicAnsRepository)(id)
+        const applied=await getLast5ApplicationByUserId(applyRepository)(id)
+        res.json({applications,saved:saved[0],chat:chat[0],LAS:LAS[0],applied})
+
+    } catch (error) {
+        
+    }
+}
+
+export const updateUserProfile=async (req: Request, res: Response)=>{
+    try {
+        const {userId,userName,profileImg,facebook,instagram,linkedIn,gitHub}=req.body
+        const data=await updateMyProfile(userRepository)(userId,userName,profileImg,{facebook,instagram,linkedIn,gitHub})
+        res.json(data)
+    } catch (error) {
+        
+    }
 }

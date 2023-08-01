@@ -81,6 +81,18 @@ const userSchema=new Schema<User>({
     },
     mockPer:{
         type:'number'
+    },
+    facebook:{
+        type:'string'
+    },
+    instagram:{
+        type:'string'
+    },
+    linkedIn:{
+        type:'string'
+    },
+    gitHub:{
+        type:'string'
     }
 
 })

@@ -41,3 +41,7 @@ export const addAppliedBy=(jobrepository:jobRepository)=>async(jobId:string,user
     const response=await jobrepository.addToApplied(jobId,user)
     return response
 }
+export const mySavedJobCount=(jobrepository:jobRepository)=>async(userId:string)=>{
+    const response=await jobrepository.getSavedCountById(userId)
+    return response
+}

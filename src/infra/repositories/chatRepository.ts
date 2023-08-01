@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 export type chatRepository={
     createChat:(empId:string,candidateId:string)=>Promise<Chat|null>
     getAllChats:(userId:string)=>Promise<Chat[] |null>
-
+    getChatCount:(userId:string)=>Promise<number[]>
 }
 
 export const chatRepositoryEmpl=(chatsModel:MongoDBChat):chatRepository=>{
@@ -41,9 +41,30 @@ export const chatRepositoryEmpl=(chatsModel:MongoDBChat):chatRepository=>{
         const chats=chatModel.find({users:{$elemMatch:{$eq:id}}}).populate('users','-password').populate('latestMessage').sort({updatedAt:-1})
         return chats
     }
+    
+    const getChatCount = async (userId: string): Promise<number[]> => {
+        const id = new mongoose.Types.ObjectId(userId)
+        const num = await chatModel.aggregate([{
+            $unwind: "$users"
+        },{
+            $match:{
+                users:id
+            }
+        },
+        {
+            $group:{
+                _id:null,
+                count:{$sum:1}
+            }
+        }
+
+    ])
+    return num
+    }
 
     return {
         createChat,
-        getAllChats
+        getAllChats,
+        getChatCount
     }
 }

@@ -3,8 +3,18 @@ import { loginAdmin } from "../../app/usecases/admin/loginAdmin"
 import { AdminRepositoryImpl } from "../../infra/repositories/adminRespository"
 import { adminModel } from "../../infra/Database/adminModel"
 import jsonwebtoken from 'jsonwebtoken'
+import { countUsers } from "../../app/usecases/admin/getUsers"
+import { UserRepositoryImpl } from "../../infra/repositories/userRepository"
+import { userModel } from "../../infra/Database/userModel"
+import { subscriptionHistory, totalRevenueAdmin } from "../../app/usecases/Subscription/subscription"
+import { SubscriptionRepositoryImpl } from "../../infra/repositories/subscriptionRepository"
+import { subscriptionModel } from "../../infra/Database/subscriptionModel"
 
 const adminRepository=AdminRepositoryImpl(adminModel)
+const SubscriptionRepository=SubscriptionRepositoryImpl(subscriptionModel)
+
+const userRepository = UserRepositoryImpl(userModel)
+
 
 export const adminLogin=async(req:Request,res:Response)=>{
     const {email,password}=req.body
@@ -40,4 +50,11 @@ export const adminLogin=async(req:Request,res:Response)=>{
 export const adminLogout=async (req:Request,res:Response)=>{
     res.clearCookie('adminJWT')
     res.json({signout:true})
+}
+
+export const adminDashboardData=async (req:Request,res:Response)=>{
+    const {number,premium,emp} = await countUsers(userRepository)()
+    const revenue=await totalRevenueAdmin(SubscriptionRepository)()
+    const subscription=await subscriptionHistory(SubscriptionRepository)()
+    res.json({users:number,premium,emp,revenue,subscription})
 }

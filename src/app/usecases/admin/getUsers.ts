@@ -18,6 +18,10 @@ export const Employers=(userRepository:userRepository)=>async():Promise<User[]>=
     return users
 }
 
+export const countUsers=(userRepository:userRepository)=>async()=>{
+    const counts=await userRepository.getUsersCount()
+    return counts
+}
 
 export const sentConfirmationMail =(email:string)=>{
     

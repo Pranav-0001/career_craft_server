@@ -9,3 +9,8 @@ export const getChats=(chatRepository:chatRepository)=>async(userId:string)=>{
     const chats=await chatRepository.getAllChats(userId)
     return chats
 }
+
+export const chatCount=(chatRepository:chatRepository)=>async(userId:string)=>{
+    const count=await chatRepository.getChatCount(userId)
+    return count
+}

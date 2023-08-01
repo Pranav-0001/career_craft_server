@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { auth, generateOtp, getPremiumPageData, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateProfInformation, updateProfileInformation, userLoginController, userRegister } from "../controllers/userController";
+import { auth, generateOtp, getDashboardData, getPremiumPageData, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateProfInformation, updateProfileInformation, updateUserProfile, userLoginController, userRegister } from "../controllers/userController";
 import {  bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, removeBookmarkCntrl } from "../controllers/jobController";
 import { applyJobCntrl, getAppliedByUserCntrl } from "../controllers/applicationController";
 import { candidateAuth } from "../Middlewares/candidateAuth";
 import { getExamcntrl, setAttended, submitExam } from "../controllers/ExamController";
 import { addSubscriptionCntrl } from "../controllers/subscription.Controller";
 import { CreateMockTestCntrl, getMockTestCntrl, setMockAttendedCntrl, submitMockAnswerCntrl } from "../controllers/mockTestController";
-import { addPubilcQuestion, ansPublicQuestion, getPublicQuestion, getPublicQuestions } from "../controllers/publicQuestion";
+import { addPubilcQuestion, ansPublicQuestion, answerlikeCntrl, editMyAns, getMyAns, getPublicAnswersById, getPublicQuestion, getPublicQuestions, getmypublicanswers, getmypublicquestions, questionLike, questionUnLike, undoAnslikeCntrl, updateQueCntrl } from "../controllers/publicQuestion";
 
 const router=Router()
 
@@ -47,5 +47,17 @@ router.post('/addpublicquestion',addPubilcQuestion)
 router.get('/getpublicquestions',getPublicQuestions)
 router.get('/getPublicQuestion/:id',getPublicQuestion)
 router.post('/postAnswerPublicQuestion/:id',ansPublicQuestion)
+router.get('/getmyAnswer/:id',getMyAns)
+router.put('/editmyanswer',editMyAns)
+router.get('/getanswers/:id',getPublicAnswersById)
+router.put('/likeanswer',answerlikeCntrl)
+router.put('/unlikeanswer',undoAnslikeCntrl)
+router.put('/likequestion',questionLike)
+router.put('/unlikequestion',questionUnLike)
+router.get('/getmypublicquestion/:id',getmypublicquestions)
+router.get('/getmypublicanswer/:id',getmypublicanswers)
+router.put('/updatepublicquestion',updateQueCntrl)
+router.get('/dashboard/:id',getDashboardData)
+router.put(`/myprofile`,updateUserProfile)
 
 export default router

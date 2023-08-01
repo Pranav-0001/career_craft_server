@@ -15,6 +15,7 @@ export type jobRepository = {
     removeSaved:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
     getBookmarked:(userId:string)=>Promise<Job[]>
     addToApplied:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
+    getSavedCountById:(id:string)=>Promise<number[]>
 }
 export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
 
@@ -799,6 +800,26 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
         return domains
     }
 
+    const getSavedCountById=async(id:string):Promise<number[]>=>{
+        const Id=new mongoose.Types.ObjectId(id)
+        const domain=await jobModel.aggregate([{
+            $unwind:"$savedBy"
+        },
+        {
+            $match:{
+                "savedBy":Id
+            }
+        },
+        {
+            $group:{
+                _id:null,
+                count:{$sum:1}
+            }
+        }
+    ])
+    return domain
+    }
+
     return {
         addJob,
         getEmpJobs,
@@ -810,6 +831,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
         removeSaved,
         getBookmarked,
         addToApplied,
-        editJob
+        editJob,
+        getSavedCountById
     }
 }

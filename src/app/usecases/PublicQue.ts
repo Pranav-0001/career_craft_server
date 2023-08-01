@@ -20,3 +20,23 @@ export const addAnsUserId=(publicQuestionRepository:publicQuestionRepository)=>a
     const data=await publicQuestionRepository.updateAnsArray(qId,userId)
     return data
 }
+
+export const likeQuestionWithId=(publicQuestionRepository:publicQuestionRepository)=>async(qId:string,userId:string)=>{
+    const data=await publicQuestionRepository.likeQuestion(qId,userId)
+    return data
+}
+
+export const UnlikeQuestionWithId=(publicQuestionRepository:publicQuestionRepository)=>async(qId:string,userId:string)=>{
+    const data=await publicQuestionRepository.UnlikeQuestion(qId,userId)
+    return data
+}
+
+export const getQueByUser=(publicQuestionRepository:publicQuestionRepository)=>async(userId:string)=>{
+    const data=await publicQuestionRepository.getQuestionByUser(userId)
+    return data
+}
+
+export const updatePublicQuestion=(publicQuestionRepository:publicQuestionRepository)=>async(qId:string,title:string,language:string,question:string,code?:string)=>{
+    const data=await publicQuestionRepository.updateQue(qId,title,language,question,code)
+    return data
+}
