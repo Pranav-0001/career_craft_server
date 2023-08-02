@@ -7,7 +7,7 @@ import { generateSignupOtp } from "../../app/usecases/user/generateOtp";
 import jsonwebtoken, { JwtPayload } from 'jsonwebtoken'
 import { validate, validateRefresh } from "../../utils/validateJWT";
 import { Employers, Nonpremium, Premium } from "../../app/usecases/admin/getUsers";
-import { expiredSubs, getUserInfo, updateBasic, updateEducation, updateMyProfile, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
+import { expiredSubs, getUserInfo, updateBasic, updateEducation, updateEmployer, updateMyProfile, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
 import { getMockExamById, getMockLastExamByUserId } from "../../app/usecases/exam/MockTest";
 import { MockExamRepositoryImpl } from "../../infra/repositories/mockExamRepository";
 import { MockeTestModel } from "../../infra/Database/mockTestModel";
@@ -255,6 +255,16 @@ export const updateUserProfile=async (req: Request, res: Response)=>{
     try {
         const {userId,userName,profileImg,facebook,instagram,linkedIn,gitHub}=req.body
         const data=await updateMyProfile(userRepository)(userId,userName,profileImg,{facebook,instagram,linkedIn,gitHub})
+        res.json(data)
+    } catch (error) {
+        
+    }
+}
+
+export const updateEmployerProfile=async (req: Request, res: Response)=>{
+    try {
+        const {EmpId,image,firstname,lastname,username,company,location,facebook,instagram,linkedIn}=req.body
+        const data=await updateEmployer(userRepository)(EmpId,image,firstname,lastname,username,company,location,{instagram,facebook,linkedIn})
         res.json(data)
     } catch (error) {
         

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { auth, generateOtp, getDashboardData, getPremiumPageData, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateProfInformation, updateProfileInformation, updateUserProfile, userLoginController, userRegister } from "../controllers/userController";
+import { auth, generateOtp, getDashboardData, getPremiumPageData, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateEmployerProfile, updateProfInformation, updateProfileInformation, updateUserProfile, userLoginController, userRegister } from "../controllers/userController";
 import {  bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, removeBookmarkCntrl } from "../controllers/jobController";
 import { applyJobCntrl, getAppliedByUserCntrl } from "../controllers/applicationController";
 import { candidateAuth } from "../Middlewares/candidateAuth";
@@ -7,6 +7,7 @@ import { getExamcntrl, setAttended, submitExam } from "../controllers/ExamContro
 import { addSubscriptionCntrl } from "../controllers/subscription.Controller";
 import { CreateMockTestCntrl, getMockTestCntrl, setMockAttendedCntrl, submitMockAnswerCntrl } from "../controllers/mockTestController";
 import { addPubilcQuestion, ansPublicQuestion, answerlikeCntrl, editMyAns, getMyAns, getPublicAnswersById, getPublicQuestion, getPublicQuestions, getmypublicanswers, getmypublicquestions, questionLike, questionUnLike, undoAnslikeCntrl, updateQueCntrl } from "../controllers/publicQuestion";
+import { empAuth } from "../Middlewares/empAuth";
 
 const router=Router()
 
@@ -23,15 +24,15 @@ router.post('/generate-otp',generateOtp)
 router.post('/logout',removeRefreshToken)
 router.get('/alljobs',getAllJobs)
 router.get('/domains',getDomains)
-router.get('/job/:id',getSingleJOb)
-router.get('/savejobs',getSavedJobsCntrl)
-router.post('/bookmarkjob',bookmarkCntrl)
-router.post('/removesaved',removeBookmarkCntrl)
-router.post('/applyjob',applyJobCntrl)
-router.post('/basic-update/:userId',updateBasicInformation)
-router.post('/profile-update/:userId',updateProfileInformation)
-router.put('/education-update/:userId',updateEducationInformation)
-router.put('/professional-update/:userId',updateProfInformation)
+router.get('/job/:id',candidateAuth,getSingleJOb)
+router.get('/savejobs',candidateAuth,getSavedJobsCntrl)
+router.post('/bookmarkjob',candidateAuth,bookmarkCntrl)
+router.post('/removesaved',candidateAuth,removeBookmarkCntrl)
+router.post('/applyjob',candidateAuth,applyJobCntrl)
+router.post('/basic-update/:userId',candidateAuth,updateBasicInformation)
+router.post('/profile-update/:userId',candidateAuth,updateProfileInformation)
+router.put('/education-update/:userId',candidateAuth,updateEducationInformation)
+router.put('/professional-update/:userId',candidateAuth,updateProfInformation)
 router.get('/getuserdata/:userId',getUserDataCntrl)
 router.get('/user-applied-jobs/:userId',candidateAuth,getAppliedByUserCntrl)
 router.get('/get-exam/:exam',getExamcntrl)
@@ -56,8 +57,9 @@ router.put('/likequestion',questionLike)
 router.put('/unlikequestion',questionUnLike)
 router.get('/getmypublicquestion/:id',getmypublicquestions)
 router.get('/getmypublicanswer/:id',getmypublicanswers)
-router.put('/updatepublicquestion',updateQueCntrl)
-router.get('/dashboard/:id',getDashboardData)
-router.put(`/myprofile`,updateUserProfile)
+router.put('/updatepublicquestion',candidateAuth,updateQueCntrl)
+router.get('/dashboard/:id',candidateAuth,getDashboardData)
+router.put(`/myprofile`,candidateAuth,updateUserProfile)
+router.put('/updateEmployer',empAuth,updateEmployerProfile)
 
 export default router

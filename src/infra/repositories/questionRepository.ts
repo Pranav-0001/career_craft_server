@@ -8,6 +8,9 @@ export type questionRepository={
     getQuestions:(page:string,empId:string)=>Promise<QuestionType[]>
     getCount:(empId:string)=>Promise<number>
     getQuestionsByDiff:(diff:string)=>Promise<QuestionType[]>
+    getAllQuestions:(page:string)=>Promise<{questions:QuestionType[],count:number}>
+    disableQue:(qId:string)=>Promise<UpdateWriteOpResult>
+    enableQue:(qId:string)=>Promise<UpdateWriteOpResult>
 }
 
 export const QuestionRepositoryImpl = (questionModel:MongoDBQuestion):questionRepository=>{
@@ -38,8 +41,25 @@ export const QuestionRepositoryImpl = (questionModel:MongoDBQuestion):questionRe
 
     }
     const getQuestionsByDiff=async(diff:string)=>{
-        const questions=await questionModel.find({difficulty:diff})
+        const questions=await questionModel.find({status:true,difficulty:diff})
         return questions
+    }
+
+    const getAllQuestions = async(page:string)=>{
+        const skip=(parseInt(page)-1)*10
+        const count=await questionModel.countDocuments()
+        const questions=await questionModel.find().skip(skip).limit(10)
+        return {questions,count}
+    }
+    const disableQue=async(qId:string)=>{
+        const id=new mongoose.Types.ObjectId(qId)
+        const update=await questionModel.updateOne({_id:id},{$set:{status:false}})
+        return update
+    }
+    const enableQue=async(qId:string)=>{
+        const id=new mongoose.Types.ObjectId(qId)
+        const update=await questionModel.updateOne({_id:id},{$set:{status:true}})
+        return update
     }
 
     
@@ -47,6 +67,10 @@ export const QuestionRepositoryImpl = (questionModel:MongoDBQuestion):questionRe
         createQuestion,
         getQuestions,
         getCount,
-        getQuestionsByDiff
+        getQuestionsByDiff,
+        getAllQuestions,
+        disableQue,
+        enableQue
+        
     }
 }

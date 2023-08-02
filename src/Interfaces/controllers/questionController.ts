@@ -1,5 +1,5 @@
 import { Request,Response } from "express"
-import { addQuestion, getCount, getQuestions } from "../../app/usecases/questions/question"
+import { addQuestion, disableQueStatus, enableQueStatus, getAllQuestions, getCount, getQuestions } from "../../app/usecases/questions/question"
 import { QuestionRepositoryImpl } from "../../infra/repositories/questionRepository"
 import { QuestionModel } from "../../infra/Database/questionModel"
 
@@ -25,4 +25,30 @@ export const getAllQuestionsCntrl=async(req:Request,res:Response)=>{
         }
     res.json({questions,pagecount})
     
+}
+
+export const allQuestions=async(req:Request,res:Response)=>{
+    const {page}=req.params
+    console.log(page);
+    
+    const {questions,count} = await getAllQuestions(QueRepository)(page)
+    let pages=Math.ceil(count/10)
+    let pagination:number[]=[]
+    for(let i=1;i<=pages;i++){
+        pagination.push(i)
+    }
+    res.json({questions,pagination})
+
+}
+
+export const quesEnableCntrl=async(req:Request,res:Response)=>{
+    const {qId}=req.body
+    const data=await enableQueStatus(QueRepository)(qId)
+    res.json(data)
+}
+
+export const quesDisbleCntrl=async(req:Request,res:Response)=>{
+    const {qId}=req.body
+    const data=await disableQueStatus(QueRepository)(qId)
+    res.json(data)
 }

@@ -30,3 +30,15 @@ function shuffleArray(array:string[]) {
     return array;
   }
   
+  export const getAllQuestions=(queModel:questionRepository)=>async(page:string)=>{
+    const data=await queModel.getAllQuestions(page)
+    return data
+  }
+  export const enableQueStatus=(queModel:questionRepository)=>async(qId:string)=>{
+    const data=await queModel.enableQue(qId)
+    return data
+  }
+  export const disableQueStatus=(queModel:questionRepository)=>async(qId:string)=>{
+    const data=await queModel.disableQue(qId)
+    return data
+  }

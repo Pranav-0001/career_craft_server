@@ -30,10 +30,11 @@ export const subscriptionHistoryForadmin=async(req:Request,res:Response)=>{
         const data=await subscriptionHistoryAdmin(SubscriptionRepository)(page)
         const count=await subscriptionCount(SubscriptionRepository)()
         let pages:number[]=[]
-        for(let i=1;i<=count;i++){
+        let no=Math.ceil(count/10)
+        for(let i=1;i<=no;i++){
             pages.push(i)
         }
-        res.json({data,pages})
+        res.json({subs:data,pages})
 
     } catch (error) {
         console.log(error);

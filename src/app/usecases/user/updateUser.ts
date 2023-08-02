@@ -46,3 +46,7 @@ export const updateMyProfile=(userRepository:userRepository)=>async(userId:strin
     return update
 }
 
+export const updateEmployer=(userRepository:userRepository)=>async(userId:string,image:string,firstname:string,lastname:string,username:string,company:string,location:string,social:socialType)=>{
+    const update=await userRepository.updateEmpProfile(userId,image,username,firstname,lastname,company,location,social)
+    return update
+}

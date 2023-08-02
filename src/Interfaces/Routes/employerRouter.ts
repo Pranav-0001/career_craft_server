@@ -3,9 +3,10 @@ import { EmployerRegister, editJob, generateOtp, getEmployerJobs, postJob, remov
 import { empAuth } from "../Middlewares/empAuth";
 import { getApplicationByEmpIdCntrl } from "../controllers/applicationController";
 import { acceptApplicationCntroller, fetchEmpChatsCntrlr } from "../controllers/chatController";
-import { addQuestionCntrl, getAllQuestionsCntrl } from "../controllers/questionController";
+import { addQuestionCntrl, getAllQuestionsCntrl, quesDisbleCntrl, quesEnableCntrl } from "../controllers/questionController";
 import { generateExam, getExamcntrl, getRestrl } from "../controllers/ExamController";
 import { getSingleJOb } from "../controllers/jobController";
+import { disableQueStatus, enableQueStatus } from "../../app/usecases/questions/question";
 const router=Router()
 
 
@@ -23,7 +24,8 @@ router.get('/getquestions',getAllQuestionsCntrl)
 router.post('/create-exam',generateExam)
 router.get('/job/:id',getSingleJOb)
 router.get('/get-results/:exam',getRestrl)
-
+router.post('/enable-question',empAuth,quesEnableCntrl)
+router.post('/disable-question',empAuth,quesDisbleCntrl)
 
 
 

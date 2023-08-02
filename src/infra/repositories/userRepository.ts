@@ -19,6 +19,7 @@ export type userRepository={
     updateExp:(userId:string)=>Promise<UpdateWriteOpResult>
     updateUserProfile:(userId:string,username:string,profileImg:string,social?:socialType)=>Promise<UpdateWriteOpResult>
     getUsersCount:()=>Promise<{number:number,premium:number,emp:number}>
+    updateEmpProfile:(empId:string,img:string,username:string,firstname:string,lastname:string,company:string,location:string,social:socialType)=>Promise<UpdateWriteOpResult>
 }
 
 export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
@@ -175,6 +176,23 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         
         return {number,premium,emp}
     }
+
+    const updateEmpProfile=async(empId:string,img:string,username:string,firstname:string,lastname:string,company:string,location:string,social:socialType)=>{
+        const id=new mongoose.Types.ObjectId(empId)
+        const update=await userModel.updateOne({_id:id},{$set:{
+            profileImg:img,
+            firstname,
+            lastname,
+            username,
+            company,
+            location,
+            facebook:social?.facebook,
+            instagram:social?.instagram,
+            linkedIn:social?.linkedIn
+
+        }})
+        return update
+    }
     
     return {
         findByEmail ,
@@ -192,6 +210,7 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         updatePoint,
         updateExp,
         updateUserProfile,
-        getUsersCount
+        getUsersCount,
+        updateEmpProfile
     }
 }
