@@ -7,7 +7,7 @@ import { generateSignupOtp } from "../../app/usecases/user/generateOtp";
 import jsonwebtoken, { JwtPayload } from 'jsonwebtoken'
 import { validate, validateRefresh } from "../../utils/validateJWT";
 import { Employers, Nonpremium, Premium } from "../../app/usecases/admin/getUsers";
-import { expiredSubs, getUserInfo, updateBasic, updateEducation, updateEmployer, updateMyProfile, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
+import { checkPassWord, expiredSubs, getUserInfo, updateBasic, updateEducation, updateEmployer, updateMyProfile, updatePassWord, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
 import { getMockExamById, getMockLastExamByUserId } from "../../app/usecases/exam/MockTest";
 import { MockExamRepositoryImpl } from "../../infra/repositories/mockExamRepository";
 import { MockeTestModel } from "../../infra/Database/mockTestModel";
@@ -266,6 +266,22 @@ export const updateEmployerProfile=async (req: Request, res: Response)=>{
         const {EmpId,image,firstname,lastname,username,company,location,facebook,instagram,linkedIn}=req.body
         const data=await updateEmployer(userRepository)(EmpId,image,firstname,lastname,username,company,location,{instagram,facebook,linkedIn})
         res.json(data)
+    } catch (error) {
+        
+    }
+}
+
+export const changePasswordCntrl=async(req:Request,res:Response)=>{
+    try {
+        const {password,newPassword,userId}=req.body
+        const status=await checkPassWord(userRepository)(userId,password)
+        if(status){
+            const data=await updatePassWord(userRepository)(userId,newPassword)
+            res.json({message:"Password updated"})
+        }
+        else {
+            res.json({error:"Invalid Password"})
+        }
     } catch (error) {
         
     }

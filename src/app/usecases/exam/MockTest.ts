@@ -13,6 +13,7 @@ export const getMockExamById=(MockExamRepository: MockExamRepository)=>async (ex
     const exam =await MockExamRepository.getMockTest(examId)
     return exam
 }
+
 export const updateAttended=(MockExamRepository: MockExamRepository)=>async (examId:string)=>{
     const exam =await MockExamRepository.updateAttended(examId)
     return exam
@@ -32,5 +33,10 @@ export const updateAnswer=(MockExamRepository:MockExamRepository)=>async (answer
 
 export const getMockLastExamByUserId=(MockExamRepository:MockExamRepository)=>async(user:string)=>{
     const exams=await MockExamRepository.getLast5MockTests(user)
+    return exams
+}
+
+export const getMockTestByUserId=(MockExamRepository:MockExamRepository)=>async(user:string,page:string)=>{
+    const exams=await MockExamRepository.getMockTestsByUser(user,page)
     return exams
 }

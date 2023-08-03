@@ -1,13 +1,14 @@
 import { Router } from "express";
-import { auth, generateOtp, getDashboardData, getPremiumPageData, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateEmployerProfile, updateProfInformation, updateProfileInformation, updateUserProfile, userLoginController, userRegister } from "../controllers/userController";
+import { auth, changePasswordCntrl, generateOtp, getDashboardData, getPremiumPageData, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateEmployerProfile, updateProfInformation, updateProfileInformation, updateUserProfile, userLoginController, userRegister } from "../controllers/userController";
 import {  bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, removeBookmarkCntrl } from "../controllers/jobController";
 import { applyJobCntrl, getAppliedByUserCntrl } from "../controllers/applicationController";
 import { candidateAuth } from "../Middlewares/candidateAuth";
-import { getExamcntrl, setAttended, submitExam } from "../controllers/ExamController";
+import { getExamcntrl, getRestrl, setAttended, submitExam } from "../controllers/ExamController";
 import { addSubscriptionCntrl } from "../controllers/subscription.Controller";
-import { CreateMockTestCntrl, getMockTestCntrl, setMockAttendedCntrl, submitMockAnswerCntrl } from "../controllers/mockTestController";
+import { CreateMockTestCntrl, getMockResCntrl, getMockTestCntrl, getMyMockTests, setMockAttendedCntrl, submitMockAnswerCntrl } from "../controllers/mockTestController";
 import { addPubilcQuestion, ansPublicQuestion, answerlikeCntrl, editMyAns, getMyAns, getPublicAnswersById, getPublicQuestion, getPublicQuestions, getmypublicanswers, getmypublicquestions, questionLike, questionUnLike, undoAnslikeCntrl, updateQueCntrl } from "../controllers/publicQuestion";
 import { empAuth } from "../Middlewares/empAuth";
+
 
 const router=Router()
 
@@ -61,5 +62,8 @@ router.put('/updatepublicquestion',candidateAuth,updateQueCntrl)
 router.get('/dashboard/:id',candidateAuth,getDashboardData)
 router.put(`/myprofile`,candidateAuth,updateUserProfile)
 router.put('/updateEmployer',empAuth,updateEmployerProfile)
+router.get('/getallmocktests',candidateAuth,getMyMockTests)
+router.get('/get-results/:exam',candidateAuth,getMockResCntrl)
+router.put('/changepassword',candidateAuth,changePasswordCntrl)
 
 export default router

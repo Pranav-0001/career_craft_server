@@ -10,6 +10,8 @@ export type MockExamRepository={
     getLast5MockTests:(user:string)=>Promise<MockTestType[] >
     updateAttended:(exam:string)=>Promise<UpdateWriteOpResult>
     updateAnswer:(answer: { queId?: string, userAns?: string, status?: boolean }[],mark:number, exam: string)=>Promise<UpdateWriteOpResult>
+    getMockTestsByUser:(user:string,page:string)=>Promise<{exams:MockTestType[] ,count:number} >
+  
 }
 
 export const MockExamRepositoryImpl = (examModel:MongoDBMock):MockExamRepository=>{
@@ -43,14 +45,24 @@ export const MockExamRepositoryImpl = (examModel:MongoDBMock):MockExamRepository
     }
     const getLast5MockTests=async(user:string)=>{
         const id=new mongoose.Types.ObjectId(user)
-        const data=await examModel.find({candidate:id})
+        const data=await examModel.find({candidate:id}).sort({_id:-1}).limit(5)
         return data
     }
+    const getMockTestsByUser=async(user:string,page:string)=>{
+        const skip=(parseInt(page)-1)*10
+        const id=new mongoose.Types.ObjectId(user)
+        const data=await examModel.find({candidate:id}).sort({_id:-1}).skip(skip).limit(10)
+        const count=await examModel.countDocuments()
+        return {exams:data,count}
+    }
+    
     return {
         createMockTest,
         getMockTest,
         updateAttended,
         updateAnswer,
-        getLast5MockTests
+        getLast5MockTests,
+        getMockTestsByUser,
+        
     }
 }

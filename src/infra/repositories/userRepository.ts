@@ -1,6 +1,7 @@
 import mongoose, { UpdateWriteOpResult } from "mongoose";
 import { User, socialType } from "../../domain/models/user";
 import { MongoDBUser } from "../Database/userModel";
+import bcrypt from 'bcrypt'
 
 export type userRepository={
     findByEmail:(email:string) => Promise<User | null>;
@@ -20,6 +21,8 @@ export type userRepository={
     updateUserProfile:(userId:string,username:string,profileImg:string,social?:socialType)=>Promise<UpdateWriteOpResult>
     getUsersCount:()=>Promise<{number:number,premium:number,emp:number}>
     updateEmpProfile:(empId:string,img:string,username:string,firstname:string,lastname:string,company:string,location:string,social:socialType)=>Promise<UpdateWriteOpResult>
+    updatePassword:(userId:string,newPass:string)=>Promise<UpdateWriteOpResult>
+    checkPass:(userId:string,password:string)=>Promise<boolean>
 }
 
 export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
@@ -193,6 +196,19 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         }})
         return update
     }
+    const checkPass=async(userId:string,password:string)=>{
+        const user=await userModel.findOne({_id:new mongoose.Types.ObjectId(userId)})
+        if(user){
+            const status=bcrypt.compare(password,user.password)
+            return status
+        }
+        return false
+    }
+    const updatePassword=async(userId:string,newPass:string)=>{
+       const password=await bcrypt.hash(newPass,10)
+       const update=await userModel.updateOne({_id:new mongoose.Types.ObjectId(userId)},{$set:{password:password}})
+       return update
+    }
     
     return {
         findByEmail ,
@@ -211,6 +227,8 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         updateExp,
         updateUserProfile,
         getUsersCount,
-        updateEmpProfile
+        updateEmpProfile,
+        updatePassword,
+        checkPass
     }
 }

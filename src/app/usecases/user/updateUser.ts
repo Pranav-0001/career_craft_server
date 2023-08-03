@@ -50,3 +50,13 @@ export const updateEmployer=(userRepository:userRepository)=>async(userId:string
     const update=await userRepository.updateEmpProfile(userId,image,username,firstname,lastname,company,location,social)
     return update
 }
+
+export const checkPassWord=(userRepository:userRepository)=>async(userId:string,password:string)=>{
+    const status=await userRepository.checkPass(userId,password)
+    return status
+}
+
+export const updatePassWord=(userRepository:userRepository)=>async(userId:string,newPassword:string)=>{
+    const status=await userRepository.updatePassword(userId,newPassword)
+    return status
+}
