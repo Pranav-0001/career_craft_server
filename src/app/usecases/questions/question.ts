@@ -42,3 +42,14 @@ function shuffleArray(array:string[]) {
     const data=await queModel.disableQue(qId)
     return data
   }
+
+  export const updateQuestion=(queModel:questionRepository)=>async(qId:string,question:string,answer:string,option1:string,option2:string,option3:string,difficulty:string,code?:string)=>{
+    const options=shuffleArray([answer,option1,option2,option3])
+    const data=await queModel.questionEdit(qId,question,answer,options,difficulty,code)
+    return data
+  }
+
+  export const getQuesrionById=(queModel:questionRepository)=>async(qId:string)=>{
+    const data=await queModel.getQuestion(qId)
+    return data
+  }

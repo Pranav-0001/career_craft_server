@@ -160,16 +160,24 @@ export const getmypublicquestions=async(req:Request,res:Response)=>{
 }
 
 export const getmypublicanswers=async(req:Request,res:Response)=>{
+    try {
     const {id}=req.params
     const answers=await getAnsByUser(publicAnsRepository)(id)
     res.json(answers)
+    } catch (error) {
+        
+    }
 }
 
 export const updateQueCntrl=async(req:Request,res:Response)=>{
-    const {qId,title,language,question,code}=req.body
+    try {
+        const {qId,title,language,question,code}=req.body
     
     
     const data=await updatePublicQuestion(publicQuestionRepository)(qId,title,language,question,code)
     res.json(data)
+    } catch (error) {
+        
+    }
     
 }

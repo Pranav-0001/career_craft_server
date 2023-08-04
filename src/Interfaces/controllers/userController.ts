@@ -7,7 +7,7 @@ import { generateSignupOtp } from "../../app/usecases/user/generateOtp";
 import jsonwebtoken, { JwtPayload } from 'jsonwebtoken'
 import { validate, validateRefresh } from "../../utils/validateJWT";
 import { Employers, Nonpremium, Premium } from "../../app/usecases/admin/getUsers";
-import { checkPassWord, expiredSubs, getUserInfo, updateBasic, updateEducation, updateEmployer, updateMyProfile, updatePassWord, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
+import { blockUser, checkPassWord, expiredSubs, getUserInfo, updateBasic, updateEducation, updateEmployer, updateMyProfile, updatePassWord, updateProfessional, updateProfile } from "../../app/usecases/user/updateUser";
 import { getMockExamById, getMockLastExamByUserId } from "../../app/usecases/exam/MockTest";
 import { MockExamRepositoryImpl } from "../../infra/repositories/mockExamRepository";
 import { MockeTestModel } from "../../infra/Database/mockTestModel";
@@ -52,6 +52,7 @@ export const userLoginController = async (req: Request, res: Response) => {
             if (user === "employer") {
                 res.json({ message: `Verification Pending. You'll get an email when account is verified.`, notVerified: true })
             } else {
+                
                 res.json({ message: `Account is banned by admin.` })
             }
         }
@@ -274,6 +275,7 @@ export const updateEmployerProfile=async (req: Request, res: Response)=>{
 export const changePasswordCntrl=async(req:Request,res:Response)=>{
     try {
         const {password,newPassword,userId}=req.body
+        
         const status=await checkPassWord(userRepository)(userId,password)
         if(status){
             const data=await updatePassWord(userRepository)(userId,newPassword)
@@ -286,3 +288,19 @@ export const changePasswordCntrl=async(req:Request,res:Response)=>{
         
     }
 }
+
+export const deactivateAccount=async(req:Request,res:Response)=>{
+    try {
+        const {userId,password}=req.body
+        const status=await checkPassWord(userRepository)(userId,password)
+        if(status){
+            const data=await blockUser(userRepository)(userId)
+            res.json({status:true,message:'Success'})
+        }else{
+            res.json({error:"Invalid Password"})
+        }
+    } catch (error) {
+        
+    }
+}
+

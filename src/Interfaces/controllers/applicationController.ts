@@ -15,25 +15,30 @@ const jobRepository = JobRepositoryImpl(jobModel)
 
 
 export const applyJobCntrl = async (req: Request, res: Response) => {
-    const userId = req.body.userId as string
-    const jobId = req.body.jobId as string
-    const empId = req.body.empId as string
-    const userdata = await getUserInfo(userRepository)(userId)
-    console.log(userdata, 1);
+    try {
+        const userId = req.body.userId as string
+        const jobId = req.body.jobId as string
+        const empId = req.body.empId as string
+        const userdata = await getUserInfo(userRepository)(userId)
+        console.log(userdata, 1);
 
 
-    if (userdata?.basic && userdata.profile && userdata.education) {
-        console.log({ jobId, empId, userId });
-        const application = await applyJob(applyRepository)(jobId, empId, userId)
-        if (application.status) {
-            const updateJob = await addAppliedBy(jobRepository)(jobId, userId)
-            console.log(updateJob);
+        if (userdata?.basic && userdata.profile && userdata.education) {
+            console.log({ jobId, empId, userId });
+            const application = await applyJob(applyRepository)(jobId, empId, userId)
+            if (application.status) {
+                const updateJob = await addAppliedBy(jobRepository)(jobId, userId)
+                console.log(updateJob);
 
+            }
+            res.status(201).json({ status: true, application })
+        } else {
+            res.json({ status: false, Error: "Your profile information is not complete. Please update it to continue applying for jobs." })
         }
-        res.status(201).json({ status: true, application })
-    } else {
-        res.json({ status: false, Error: "Your profile information is not complete. Please update it to continue applying for jobs." })
+    } catch (error) {
+
     }
+
 }
 
 export const getAppliedByUserCntrl = async (req: Request, res: Response) => {
@@ -62,7 +67,7 @@ export const getApplicationByEmpIdCntrl = async (req: Request, res: Response) =>
             for (let i = 1; i <= Math.ceil(count / 10); i++) {
                 pagecount.push(i)
             }
-            res.status(201).json({ applications,pagecount })
+            res.status(201).json({ applications, pagecount })
         }
 
     } catch (error) {

@@ -4,7 +4,7 @@ import { getAllEmployers, getNonPremiumUsers, getPremiumUsers } from "../control
 import { adminAuth } from "../Middlewares/adminAuth";
 import { updateEmpStatus } from "../controllers/employerController";
 import { subscriptionHistoryForadmin } from "../controllers/subscription.Controller";
-import { addQuestionCntrl, allQuestions, quesDisbleCntrl, quesEnableCntrl } from "../controllers/questionController";
+import { QuestionEditCntrl, addQuestionCntrl, allQuestions, getQuesrionByQId, quesDisbleCntrl, quesEnableCntrl } from "../controllers/questionController";
 import { disableQueStatus, enableQueStatus } from "../../app/usecases/questions/question";
 const router=Router()
 
@@ -20,6 +20,9 @@ router.get('/getallquestions/:page',adminAuth,allQuestions)
 router.post('/add-question',adminAuth,addQuestionCntrl)
 router.post('/enable-question',adminAuth,quesEnableCntrl)
 router.post('/disable-question',adminAuth,quesDisbleCntrl)
+router.put('/questionedit',adminAuth,QuestionEditCntrl)
+router.get('/question/:id',adminAuth,getQuesrionByQId)
+
 
 
 

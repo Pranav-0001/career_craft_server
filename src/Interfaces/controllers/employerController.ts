@@ -3,7 +3,7 @@ import {userModel} from '../../infra/Database/userModel'
 import {jobModel} from '../../infra/Database/jobModel'
 import { UserRepositoryImpl } from "../../infra/repositories/userRepository";
 import { generateEmpSignupOtp } from "../../app/usecases/employer/generateOtpEmp";
-import { signupEmp, verifyRmployer } from "../../app/usecases/employer/SignupEmp";
+import { getCandidates, signupEmp, verifyRmployer } from "../../app/usecases/employer/SignupEmp";
 import { EditJobEmp, addJobEmp } from "../../app/usecases/employer/postjob";
 import { JobRepositoryImpl } from "../../infra/repositories/jobRepository";
 import {getEmpJobs} from '../../app/usecases/employer/getEmpJobs'
@@ -20,11 +20,16 @@ const jobRepository=JobRepositoryImpl(empDB)
 
 
 export const generateOtp =async(req:Request,res:Response)=>{
-    const email: string= req.body.email
+    try {
+      const email: string= req.body.email
     console.log(email);
     
     const otp =  generateEmpSignupOtp(email)
-    res.json(otp)
+    res.json(otp)  
+    } catch (error) {
+        
+    }
+    
 }
 
 export const EmployerRegister = async (req:Request,res:Response)=>{
@@ -103,5 +108,19 @@ export const updateEmpStatus=async(req:Request,res:Response)=>{
         else res.json({result})
     }catch(err){
 
+    }
+}
+
+export const getCandidatesCntrl=async(req:Request,res:Response)=>{
+    try {
+        const {page}=req.params
+        const {users,count}=await getCandidates(userRepository)(page)
+        const pagination=[]
+        for(let i=1;i<=Math.ceil(count/8);i++){
+            pagination.push(i)
+        }
+        res.json({users,pagination})
+    } catch (error) {
+        
     }
 }

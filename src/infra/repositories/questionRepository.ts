@@ -11,6 +11,8 @@ export type questionRepository={
     getAllQuestions:(page:string)=>Promise<{questions:QuestionType[],count:number}>
     disableQue:(qId:string)=>Promise<UpdateWriteOpResult>
     enableQue:(qId:string)=>Promise<UpdateWriteOpResult>
+    questionEdit:(qId:string,question:string,answer:string,options:string[],difficulty:string,code?:string)=>Promise<UpdateWriteOpResult>
+    getQuestion:(id:string)=>Promise<QuestionType|null>
 }
 
 export const QuestionRepositoryImpl = (questionModel:MongoDBQuestion):questionRepository=>{
@@ -62,6 +64,18 @@ export const QuestionRepositoryImpl = (questionModel:MongoDBQuestion):questionRe
         return update
     }
 
+    const questionEdit=async(qId:string,question:string,answer:string,options:string[],difficulty:string,code?:string)=>{
+        const data=await questionModel.updateOne({_id:new mongoose.Types.ObjectId(qId)},{$set:{question:question,answer:answer,options:options,difficulty:difficulty,code:code}})
+        return data
+    }
+
+    const getQuestion=async(id:string)=>{
+        const data=await questionModel.findOne({_id:new mongoose.Types.ObjectId(id)})
+        return data
+    }
+
+    
+
     
     return {
         createQuestion,
@@ -70,7 +84,9 @@ export const QuestionRepositoryImpl = (questionModel:MongoDBQuestion):questionRe
         getQuestionsByDiff,
         getAllQuestions,
         disableQue,
-        enableQue
+        enableQue,
+        questionEdit,
+        getQuestion
         
     }
 }

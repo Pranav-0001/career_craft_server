@@ -23,6 +23,9 @@ export type userRepository={
     updateEmpProfile:(empId:string,img:string,username:string,firstname:string,lastname:string,company:string,location:string,social:socialType)=>Promise<UpdateWriteOpResult>
     updatePassword:(userId:string,newPass:string)=>Promise<UpdateWriteOpResult>
     checkPass:(userId:string,password:string)=>Promise<boolean>
+    blockUser:(userId:string)=>Promise<UpdateWriteOpResult>
+    unBlockUser:(userId:string)=>Promise<UpdateWriteOpResult>
+    getAllCandidates:(page:string)=>Promise<{users:User[],count:number}>
 }
 
 export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
@@ -209,7 +212,20 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
        const update=await userModel.updateOne({_id:new mongoose.Types.ObjectId(userId)},{$set:{password:password}})
        return update
     }
-    
+    const blockUser=async(userId:string)=>{
+        const update=await userModel.updateOne({_id:new mongoose.Types.ObjectId(userId)},{$set:{status:false}})
+        return update
+    }
+    const unBlockUser=async(userId:string)=>{
+        const update=await userModel.updateOne({_id:new mongoose.Types.ObjectId(userId)},{$set:{status:true}})
+        return update
+    }
+    const getAllCandidates=async(page:string)=>{
+        const skip=(parseInt(page)-1)*8
+        const count=await userModel.countDocuments({role:'candidate'})
+        const users=await userModel.find({role:'candidate'}).sort({isPrime:-1}).skip(skip).limit(8)
+        return {users,count}
+    }
     return {
         findByEmail ,
         create,
@@ -229,6 +245,9 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         getUsersCount,
         updateEmpProfile,
         updatePassword,
-        checkPass
+        checkPass,
+        blockUser,
+        unBlockUser,
+        getAllCandidates
     }
 }

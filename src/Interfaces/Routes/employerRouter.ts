@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { EmployerRegister, editJob, generateOtp, getEmployerJobs, postJob, removeEmpRefreshToken } from "../controllers/employerController";
+import { EmployerRegister, editJob, generateOtp, getCandidatesCntrl, getEmployerJobs, postJob, removeEmpRefreshToken } from "../controllers/employerController";
 import { empAuth } from "../Middlewares/empAuth";
 import { getApplicationByEmpIdCntrl } from "../controllers/applicationController";
 import { acceptApplicationCntroller, fetchEmpChatsCntrlr } from "../controllers/chatController";
-import { addQuestionCntrl, getAllQuestionsCntrl, quesDisbleCntrl, quesEnableCntrl } from "../controllers/questionController";
+import { QuestionEditCntrl, addQuestionCntrl, getAllQuestionsCntrl, getQuesrionByQId, quesDisbleCntrl, quesEnableCntrl } from "../controllers/questionController";
 import { generateExam, getExamcntrl, getRestrl } from "../controllers/ExamController";
 import { getSingleJOb } from "../controllers/jobController";
 import { disableQueStatus, enableQueStatus } from "../../app/usecases/questions/question";
+import { changePasswordCntrl } from "../controllers/userController";
 const router=Router()
 
 
@@ -26,6 +27,12 @@ router.get('/job/:id',getSingleJOb)
 router.get('/get-results/:exam',getRestrl)
 router.post('/enable-question',empAuth,quesEnableCntrl)
 router.post('/disable-question',empAuth,quesDisbleCntrl)
+router.put('/changepassword',empAuth,changePasswordCntrl)
+router.get('/candidates/:page',empAuth,getCandidatesCntrl)
+router.put('/questionedit',empAuth,QuestionEditCntrl)
+router.get('/question/:id',empAuth,getQuesrionByQId)
+
+
 
 
 

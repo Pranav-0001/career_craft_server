@@ -1,5 +1,5 @@
 import { Job } from "../../../domain/models/job"
-import { jobRepository } from "../../../infra/repositories/jobRepository"
+import { JobRepositoryImpl, jobRepository } from "../../../infra/repositories/jobRepository"
 
 
 export const getJobs=(jobRepository:jobRepository)=>async(page:number,domain:string|null,salary:string|null,type:string|null,sort:string|null):Promise<Job[]>=>{
@@ -43,5 +43,10 @@ export const addAppliedBy=(jobrepository:jobRepository)=>async(jobId:string,user
 }
 export const mySavedJobCount=(jobrepository:jobRepository)=>async(userId:string)=>{
     const response=await jobrepository.getSavedCountById(userId)
+    return response
+}
+
+export const searchJobs=(JobRepository:jobRepository)=>async(key:string)=>{
+    const response=await JobRepository.getJobBySearch(key)
     return response
 }

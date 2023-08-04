@@ -1,7 +1,7 @@
 import { Request,Response } from "express"
 import {jobModel} from '../../infra/Database/jobModel'
 import { JobRepositoryImpl } from "../../infra/repositories/jobRepository"
-import {  bookmarkJob, getBookmarked, getJobData, getJobs, getJobsCount, removeBookmarkJob } from "../../app/usecases/user/getJobs"
+import {  bookmarkJob, getBookmarked, getJobData, getJobs, getJobsCount, removeBookmarkJob, searchJobs } from "../../app/usecases/user/getJobs"
 import { getDomain } from "../../app/usecases/user/getDomain"
 
 const empDB=jobModel
@@ -88,6 +88,22 @@ export const getSavedJobsCntrl=async(req:Request,res:Response)=>{
             res.status(201).json({saved})
         }
         
+    } catch (error) {
+        
+    }
+}
+
+export const jobSearchCntrl=async(req:Request,res:Response)=>{
+    try {
+        const {key}=req.params
+        console.log(key);
+        
+        const {data,count}=await searchJobs(jobRepository)(key)
+        let pagecount:number[] = []
+        for(let i=1;i<=Math.ceil(count/5);i++){ 
+            pagecount.push(i)
+        }
+        res.json({job:data,pagecount})
     } catch (error) {
         
     }

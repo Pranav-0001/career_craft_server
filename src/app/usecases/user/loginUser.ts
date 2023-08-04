@@ -17,7 +17,10 @@ export const loginUser = (userRepository: userRepository) => async (email: strin
             }
         }else{
             if(user.role==='employer') return "employer"
-            else return "candidate"
+            else{
+                
+                return "candidate"
+            }
         }
 
     }

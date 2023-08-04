@@ -53,8 +53,9 @@ const jobSchema= new Schema<Job>({
         required:true
     },
     EmployerId:{
-        type:Types.ObjectId,
-        required:true
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:'user'
     },
     status:{
         type:'boolean',

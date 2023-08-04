@@ -16,7 +16,8 @@ const userRepository = UserRepositoryImpl(userModel)
 
 
 export const CreateMockTestCntrl=async(req:Request,res:Response)=>{
-    const {candidateId}:{candidateId:string} = req.body
+    try {
+      const {candidateId}:{candidateId:string} = req.body
     const easy=await getQuestionsByDiff(questionRepository)('Easy')
     const med=await getQuestionsByDiff(questionRepository)('Medium')
     const hard=await getQuestionsByDiff(questionRepository)('Hard')
@@ -38,15 +39,24 @@ export const CreateMockTestCntrl=async(req:Request,res:Response)=>{
     }
 
     const exam = await generateMockTest(mockExamRepository)(questions,candidateId)
-    res.json(exam)
+    res.json(exam)  
+    } catch (error) {
+        
+    }
+    
 
 
 }
 
 export const getMockTestCntrl=async(req:Request,res:Response)=>{
-     const {id} =req.params
+    try {
+      const {id} =req.params
      const examData=await getMockExamById(mockExamRepository)(id)
-     res.json(examData)
+     res.json(examData)  
+    } catch (error) {
+        
+    }
+     
 
 }
 export const setMockAttendedCntrl=async(req:Request,res:Response)=>{

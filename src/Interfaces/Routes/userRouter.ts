@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { auth, changePasswordCntrl, generateOtp, getDashboardData, getPremiumPageData, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateEmployerProfile, updateProfInformation, updateProfileInformation, updateUserProfile, userLoginController, userRegister } from "../controllers/userController";
-import {  bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, removeBookmarkCntrl } from "../controllers/jobController";
+import { auth, changePasswordCntrl, deactivateAccount, generateOtp, getDashboardData, getPremiumPageData, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateEmployerProfile, updateProfInformation, updateProfileInformation, updateUserProfile, userLoginController, userRegister } from "../controllers/userController";
+import {  bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, jobSearchCntrl, removeBookmarkCntrl } from "../controllers/jobController";
 import { applyJobCntrl, getAppliedByUserCntrl } from "../controllers/applicationController";
 import { candidateAuth } from "../Middlewares/candidateAuth";
 import { getExamcntrl, getRestrl, setAttended, submitExam } from "../controllers/ExamController";
@@ -54,8 +54,8 @@ router.put('/editmyanswer',editMyAns)
 router.get('/getanswers/:id',getPublicAnswersById)
 router.put('/likeanswer',answerlikeCntrl)
 router.put('/unlikeanswer',undoAnslikeCntrl)
-router.put('/likequestion',questionLike)
-router.put('/unlikequestion',questionUnLike)
+router.put('/likequestion',candidateAuth,questionLike)
+router.put('/unlikequestion',candidateAuth,questionUnLike)
 router.get('/getmypublicquestion/:id',getmypublicquestions)
 router.get('/getmypublicanswer/:id',getmypublicanswers)
 router.put('/updatepublicquestion',candidateAuth,updateQueCntrl)
@@ -65,5 +65,7 @@ router.put('/updateEmployer',empAuth,updateEmployerProfile)
 router.get('/getallmocktests',candidateAuth,getMyMockTests)
 router.get('/get-results/:exam',candidateAuth,getMockResCntrl)
 router.put('/changepassword',candidateAuth,changePasswordCntrl)
+router.put('/deactivate',candidateAuth,deactivateAccount)
+router.get('/search/:key',jobSearchCntrl)
 
 export default router

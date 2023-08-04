@@ -1,4 +1,4 @@
-import { userRepository} from "../../../infra/repositories/userRepository";
+import { UserRepositoryImpl, userRepository} from "../../../infra/repositories/userRepository";
 import { User } from "../../../domain/models/user";
 import bcrypt,{} from 'bcrypt'
 
@@ -25,4 +25,9 @@ export const signupEmp = (userRepository:userRepository)=>async (firstname:strin
 export const verifyRmployer=(userrepository:userRepository)=>async(empId:string)=>{
     const response=await userrepository.findAndUpdate(empId)
     return response
+}
+
+export const getCandidates=(UserRepository:userRepository)=>async(page:string)=>{
+    const resoponse=await UserRepository.getAllCandidates(page)
+    return resoponse
 }

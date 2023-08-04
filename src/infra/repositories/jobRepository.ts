@@ -16,7 +16,7 @@ export type jobRepository = {
     getBookmarked:(userId:string)=>Promise<Job[]>
     addToApplied:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
     getSavedCountById:(id:string)=>Promise<number[]>
-    getJobBySearch:(search:string)=>Promise<Job[]>
+    getJobBySearch:(search:string)=>Promise<{data:Job[],count:number}>
 }
 export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
 
@@ -821,8 +821,11 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
     return domain
     }
     const getJobBySearch=async(search:string)=>{
-        const data=await jobModel.find({title:{ $regex: search }})
-        return data
+        
+        
+        const data=await jobModel.find({title:{ $regex: search,$options:'i' }}).populate('EmployerId')
+        const count=await jobModel.countDocuments({title:{ $regex: search ,$options:'i'}})
+        return {data,count}
     }
 
     return {
