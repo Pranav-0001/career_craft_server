@@ -96,6 +96,12 @@ io.on("connection",(socket:any)=>{
         io.to(roomId).emit('candidate',candidate)
     })
 
+    socket.on('call end',(room:string)=>{
+        const status=true
+        io.to(room).emit('disconnect call',status)
+        
+    })
+
     
    
 })

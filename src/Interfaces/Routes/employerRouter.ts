@@ -2,7 +2,7 @@ import { Router } from "express";
 import { EmployerRegister, editJob, generateOtp, getCandidatesCntrl, getEmployerJobs, postJob, removeEmpRefreshToken } from "../controllers/employerController";
 import { empAuth } from "../Middlewares/empAuth";
 import { getApplicationByEmpIdCntrl } from "../controllers/applicationController";
-import { acceptApplicationCntroller, fetchEmpChatsCntrlr } from "../controllers/chatController";
+import { CreateChatCntrlr, acceptApplicationCntroller, fetchEmpChatsCntrlr } from "../controllers/chatController";
 import { QuestionEditCntrl, addQuestionCntrl, getAllQuestionsCntrl, getQuesrionByQId, quesDisbleCntrl, quesEnableCntrl } from "../controllers/questionController";
 import { generateExam, getExamcntrl, getRestrl } from "../controllers/ExamController";
 import { getSingleJOb } from "../controllers/jobController";
@@ -18,7 +18,7 @@ router.put("/editjob/:job",empAuth,editJob)
 router.post("/logout",removeEmpRefreshToken)
 router.get("/employer-jobs/:id",empAuth,getEmployerJobs)
 router.get ('/getapplicationsbyemp',empAuth,getApplicationByEmpIdCntrl)
-router.post('/accept-application',acceptApplicationCntroller)
+router.post('/accept-application',empAuth,acceptApplicationCntroller)
 router.get('/fetchChats/:empId',fetchEmpChatsCntrlr)
 router.post('/add-question',addQuestionCntrl)
 router.get('/getquestions',getAllQuestionsCntrl)
@@ -31,6 +31,8 @@ router.put('/changepassword',empAuth,changePasswordCntrl)
 router.get('/candidates/:page',empAuth,getCandidatesCntrl)
 router.put('/questionedit',empAuth,QuestionEditCntrl)
 router.get('/question/:id',empAuth,getQuesrionByQId)
+router.post('/create-chat',empAuth,CreateChatCntrlr)
+
 
 
 

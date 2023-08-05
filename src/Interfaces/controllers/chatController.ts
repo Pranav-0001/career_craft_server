@@ -35,3 +35,14 @@ export const fetchEmpChatsCntrlr = async (req: Request, res: Response) => {
     }
 
 }
+
+export const CreateChatCntrlr=async (req: Request, res: Response) => {
+    try {
+        const { userId, empId } = req.body
+        const accesChat = await createChat(chatRepository)(empId, userId)
+        res.json({status:true})
+    } catch (error) {
+        
+    }
+
+}
