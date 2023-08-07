@@ -44,3 +44,13 @@ export const EditJobEmp=(jobrepository:jobRepository)=>async(title:string,catego
 
 
 }
+
+export const disableJob=(jobrepository:jobRepository)=>async(id:string)=>{
+    const data= await jobrepository.jobStatusfalse(id)
+    return data
+}
+
+export const enableJob=(jobrepository:jobRepository)=>async(id:string)=>{
+    const data= await jobrepository.jobStatustrue(id)
+    return data
+}

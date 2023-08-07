@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { auth, changePasswordCntrl, deactivateAccount, generateOtp, getDashboardData, getPremiumPageData, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateEmployerProfile, updateProfInformation, updateProfileInformation, updateUserProfile, userLoginController, userRegister } from "../controllers/userController";
+import { auth, changePasswordCntrl, deactivateAccount, forgotPasswordOTP, forgotpasswordOTPSubmit, generateOtp, getDashboardData, getPremiumPageData, getUserDataCntrl, removeRefreshToken, updateBasicInformation, updateEducationInformation, updateEmployerProfile, updatePasswordCntrl, updateProfInformation, updateProfileInformation, updateUserProfile, userLoginController, userRegister } from "../controllers/userController";
 import {  bookmarkCntrl, getAllJobs, getDomains, getSavedJobsCntrl, getSingleJOb, jobSearchCntrl, removeBookmarkCntrl } from "../controllers/jobController";
 import { applyJobCntrl, getAppliedByUserCntrl } from "../controllers/applicationController";
 import { candidateAuth } from "../Middlewares/candidateAuth";
@@ -67,5 +67,8 @@ router.get('/get-results/:exam',candidateAuth,getMockResCntrl)
 router.put('/changepassword',candidateAuth,changePasswordCntrl)
 router.put('/deactivate',candidateAuth,deactivateAccount)
 router.get('/search/:key',jobSearchCntrl)
+router.post('/forgotpassword',forgotPasswordOTP)
+router.post('/forgotsubmitOtp',forgotpasswordOTPSubmit)
+router.post('/updatenewpassword',updatePasswordCntrl)
 
 export default router

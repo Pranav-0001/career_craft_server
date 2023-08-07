@@ -74,3 +74,13 @@ export const getApplicationByEmpIdCntrl = async (req: Request, res: Response) =>
 
     }
 }
+
+export const applicationCount= async (req: Request, res: Response) => {
+    try {
+        const {id}=req.params
+        const count = await getCountAppEmp(applyRepository)(id)
+        res.json(count)
+    } catch (error) {
+        
+    }
+}

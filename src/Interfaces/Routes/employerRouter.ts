@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { EmployerRegister, editJob, generateOtp, getCandidatesCntrl, getEmployerJobs, postJob, removeEmpRefreshToken } from "../controllers/employerController";
+import { EmployerRegister, editJob, generateOtp, getCandidatesCntrl, getEmployerJobs, postJob, removeEmpRefreshToken, updateStatusFalse, updateStatustrue } from "../controllers/employerController";
 import { empAuth } from "../Middlewares/empAuth";
-import { getApplicationByEmpIdCntrl } from "../controllers/applicationController";
+import { applicationCount, getApplicationByEmpIdCntrl } from "../controllers/applicationController";
 import { CreateChatCntrlr, acceptApplicationCntroller, fetchEmpChatsCntrlr } from "../controllers/chatController";
 import { QuestionEditCntrl, addQuestionCntrl, getAllQuestionsCntrl, getQuesrionByQId, quesDisbleCntrl, quesEnableCntrl } from "../controllers/questionController";
 import { generateExam, getExamcntrl, getRestrl } from "../controllers/ExamController";
@@ -32,6 +32,9 @@ router.get('/candidates/:page',empAuth,getCandidatesCntrl)
 router.put('/questionedit',empAuth,QuestionEditCntrl)
 router.get('/question/:id',empAuth,getQuesrionByQId)
 router.post('/create-chat',empAuth,CreateChatCntrlr)
+router.put('/job-true',empAuth,updateStatustrue)
+router.put('/job-false',empAuth,updateStatusFalse)
+router.get('/getappliedcount/:id',empAuth,applicationCount)
 
 
 

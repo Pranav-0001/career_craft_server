@@ -26,6 +26,8 @@ export type userRepository={
     blockUser:(userId:string)=>Promise<UpdateWriteOpResult>
     unBlockUser:(userId:string)=>Promise<UpdateWriteOpResult>
     getAllCandidates:(page:string)=>Promise<{users:User[],count:number}>
+    updatePasswordByEmail:(email:string,newPass:string)=>Promise<UpdateWriteOpResult>
+
 }
 
 export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
@@ -226,6 +228,12 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         const users=await userModel.find({role:'candidate'}).sort({isPrime:-1}).skip(skip).limit(8)
         return {users,count}
     }
+
+    const updatePasswordByEmail=async(email:string,newPass:string)=>{
+        const password=await bcrypt.hash(newPass,10)
+        const update=await userModel.updateOne({email:email},{$set:{password:password}})
+        return update
+     }
     return {
         findByEmail ,
         create,
@@ -248,6 +256,7 @@ export const UserRepositoryImpl = (userModel:MongoDBUser):userRepository=>{
         checkPass,
         blockUser,
         unBlockUser,
-        getAllCandidates
+        getAllCandidates,
+        updatePasswordByEmail
     }
 }

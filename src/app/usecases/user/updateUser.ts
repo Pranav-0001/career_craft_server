@@ -61,6 +61,11 @@ export const updatePassWord=(userRepository:userRepository)=>async(userId:string
     return status
 }
 
+export const updatePassWordByEmail=(userRepository:userRepository)=>async(email:string,newPassword:string)=>{
+    const status=await userRepository.updatePasswordByEmail(email,newPassword)
+    return status
+}
+
 export const blockUser=(userRepository:userRepository)=>async(userId:string)=>{
     const update=await userRepository.blockUser(userId)
     return update

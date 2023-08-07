@@ -17,6 +17,8 @@ export type jobRepository = {
     addToApplied:(jobId:string,user:string)=>Promise<UpdateWriteOpResult>
     getSavedCountById:(id:string)=>Promise<number[]>
     getJobBySearch:(search:string)=>Promise<{data:Job[],count:number}>
+    jobStatustrue:(id:string)=>Promise<UpdateWriteOpResult>
+    jobStatusfalse:(id:string)=>Promise<UpdateWriteOpResult>
 }
 export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
 
@@ -131,6 +133,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         category: domain,
                         jobType: type,
                         salaryTo: {
@@ -164,6 +167,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         category: domain,
                         jobType: type,
                         salaryTo: {
@@ -195,6 +199,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         category: domain,
                         jobType: type,
                     }
@@ -224,6 +229,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         category: domain,
                         jobType: type,
                     }
@@ -254,6 +260,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         category: domain,
                         salaryTo: {
                             $gte: min,
@@ -290,6 +297,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         category: domain,
                         salaryTo: {
                             $gte: min,
@@ -323,6 +331,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         jobType: type,
                         salaryTo: {
                             $gte: min,
@@ -357,6 +366,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         jobType: type,
                         salaryTo: {
                             $gte: min,
@@ -391,6 +401,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         salaryTo: {
                             $gte: min,
                             $lte: max
@@ -424,6 +435,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         salaryTo: {
                             $gte: min,
                             $lte: max
@@ -454,6 +466,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         category: domain,
 
                     }
@@ -484,6 +497,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         category: domain,
 
                     }
@@ -512,6 +526,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         jobType: type,
 
                     }
@@ -541,6 +556,7 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                     }
                 }, {
                     $match: {
+                        status:true,
                         jobType: type,
 
                     }
@@ -567,6 +583,10 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                         foreignField: '_id',
                         as: 'Employer'
                     }
+                },{
+                    $match:{
+                        status:true
+                    }
                 }, {
                     $sort: {
                         salaryTo: sort === 'low' ? 1 : -1
@@ -588,6 +608,11 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
                         localField: 'EmployerId',
                         foreignField: '_id',
                         as: 'Employer'
+                    }
+                },
+                {
+                    $match:{
+                        status:true
                     }
                 },
                 {
@@ -828,6 +853,15 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
         return {data,count}
     }
 
+    const jobStatusfalse=async(jobId:string)=>{
+        const data=await jobModel.updateOne({_id:new mongoose.Types.ObjectId(jobId)},{$set:{status:false}})
+        return data
+    }
+    const jobStatustrue=async(jobId:string)=>{
+        const data=await jobModel.updateOne({_id:new mongoose.Types.ObjectId(jobId)},{$set:{status:true}})
+        return data
+    }
+
     return {
         addJob,
         getEmpJobs,
@@ -841,6 +875,8 @@ export const JobRepositoryImpl = (jobModel: MongoDBJob): jobRepository => {
         addToApplied,
         editJob,
         getSavedCountById,
-        getJobBySearch
+        getJobBySearch,
+        jobStatusfalse,
+        jobStatustrue
     }
 }

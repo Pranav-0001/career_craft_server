@@ -4,7 +4,7 @@ import {jobModel} from '../../infra/Database/jobModel'
 import { UserRepositoryImpl } from "../../infra/repositories/userRepository";
 import { generateEmpSignupOtp } from "../../app/usecases/employer/generateOtpEmp";
 import { getCandidates, signupEmp, verifyRmployer } from "../../app/usecases/employer/SignupEmp";
-import { EditJobEmp, addJobEmp } from "../../app/usecases/employer/postjob";
+import { EditJobEmp, addJobEmp, disableJob, enableJob } from "../../app/usecases/employer/postjob";
 import { JobRepositoryImpl } from "../../infra/repositories/jobRepository";
 import {getEmpJobs} from '../../app/usecases/employer/getEmpJobs'
 import jsonwebtoken from 'jsonwebtoken'
@@ -120,6 +120,26 @@ export const getCandidatesCntrl=async(req:Request,res:Response)=>{
             pagination.push(i)
         }
         res.json({users,pagination})
+    } catch (error) {
+        
+    }
+}
+
+export const updateStatusFalse=async(req:Request,res:Response)=>{
+    try {
+        const {job}=req.body
+        const data= await disableJob(jobRepository)(job)
+        res.json(data)
+    } catch (error) {
+        
+    }
+}
+
+export const updateStatustrue=async(req:Request,res:Response)=>{
+    try {
+        const {job}=req.body
+        const data= await enableJob(jobRepository)(job)
+        res.json(data)
     } catch (error) {
         
     }

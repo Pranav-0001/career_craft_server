@@ -12,7 +12,7 @@ export const generateEmpSignupOtp =(email:string):number=>{
     let details={
         from:process.env.OTP_EMAIL,
         to:email,
-        subject:"Login OTP",
+        subject:"Email Verification",
         text: `This email is to inform you that your Verification OTP is ${otp}. Please keep this code private and refrain from sharing it with anyone. It is essential for the security and integrity of your account.`
     }
 

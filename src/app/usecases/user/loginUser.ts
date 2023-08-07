@@ -27,3 +27,10 @@ export const loginUser = (userRepository: userRepository) => async (email: strin
     return 'email'
 
 }
+
+export const getUserbyEmail=(userRepository: userRepository)=>async(email:string)=>{
+    const user = await userRepository.findByEmail(email);
+    return user
+ 
+}
+
