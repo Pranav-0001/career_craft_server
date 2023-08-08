@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { adminDashboardData, adminLogin, adminLogout } from "../controllers/adminController";
+import { adminDashboardData, adminLogin, adminLogout, blockUserCntrl, unBlockUserCntrl } from "../controllers/adminController";
 import { getAllEmployers, getNonPremiumUsers, getPremiumUsers } from "../controllers/userController";
 import { adminAuth } from "../Middlewares/adminAuth";
 import { updateEmpStatus } from "../controllers/employerController";
@@ -22,6 +22,8 @@ router.post('/enable-question',adminAuth,quesEnableCntrl)
 router.post('/disable-question',adminAuth,quesDisbleCntrl)
 router.put('/questionedit',adminAuth,QuestionEditCntrl)
 router.get('/question/:id',adminAuth,getQuesrionByQId)
+router.put('/blockuser/:id',adminAuth,blockUserCntrl)
+router.put('/unblockuser/:id',adminAuth,unBlockUserCntrl)
 
 
 

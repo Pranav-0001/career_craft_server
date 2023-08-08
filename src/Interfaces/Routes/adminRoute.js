@@ -22,4 +22,6 @@ router.post('/enable-question', adminAuth_1.adminAuth, questionController_1.ques
 router.post('/disable-question', adminAuth_1.adminAuth, questionController_1.quesDisbleCntrl);
 router.put('/questionedit', adminAuth_1.adminAuth, questionController_1.QuestionEditCntrl);
 router.get('/question/:id', adminAuth_1.adminAuth, questionController_1.getQuesrionByQId);
+router.put('/blockuser/:id', adminAuth_1.adminAuth, adminController_1.blockUserCntrl);
+router.put('/unblockuser/:id', adminAuth_1.adminAuth, adminController_1.unBlockUserCntrl);
 exports.default = router;

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.adminDashboardData = exports.adminLogout = exports.adminLogin = void 0;
+exports.unBlockUserCntrl = exports.blockUserCntrl = exports.adminDashboardData = exports.adminLogout = exports.adminLogin = void 0;
 const loginAdmin_1 = require("../../app/usecases/admin/loginAdmin");
 const adminRespository_1 = require("../../infra/repositories/adminRespository");
 const adminModel_1 = require("../../infra/Database/adminModel");
@@ -23,6 +23,7 @@ const userModel_1 = require("../../infra/Database/userModel");
 const subscription_1 = require("../../app/usecases/Subscription/subscription");
 const subscriptionRepository_1 = require("../../infra/repositories/subscriptionRepository");
 const subscriptionModel_1 = require("../../infra/Database/subscriptionModel");
+const updateUser_1 = require("../../app/usecases/user/updateUser");
 const adminRepository = (0, adminRespository_1.AdminRepositoryImpl)(adminModel_1.adminModel);
 const SubscriptionRepository = (0, subscriptionRepository_1.SubscriptionRepositoryImpl)(subscriptionModel_1.subscriptionModel);
 const userRepository = (0, userRepository_1.UserRepositoryImpl)(userModel_1.userModel);
@@ -73,3 +74,23 @@ const adminDashboardData = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.adminDashboardData = adminDashboardData;
+const blockUserCntrl = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const data = yield (0, updateUser_1.blockUser)(userRepository)(id);
+        res.json({ status: true });
+    }
+    catch (error) {
+    }
+});
+exports.blockUserCntrl = blockUserCntrl;
+const unBlockUserCntrl = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const data = yield (0, updateUser_1.unBlockUser)(userRepository)(id);
+        res.json({ status: true });
+    }
+    catch (error) {
+    }
+});
+exports.unBlockUserCntrl = unBlockUserCntrl;

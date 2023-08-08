@@ -9,6 +9,7 @@ import { userModel } from "../../infra/Database/userModel"
 import { subscriptionHistory, totalRevenueAdmin } from "../../app/usecases/Subscription/subscription"
 import { SubscriptionRepositoryImpl } from "../../infra/repositories/subscriptionRepository"
 import { subscriptionModel } from "../../infra/Database/subscriptionModel"
+import { blockUser, unBlockUser } from "../../app/usecases/user/updateUser"
 
 const adminRepository = AdminRepositoryImpl(adminModel)
 const SubscriptionRepository = SubscriptionRepositoryImpl(subscriptionModel)
@@ -67,4 +68,24 @@ export const adminDashboardData = async (req: Request, res: Response) => {
 
     }
 
+}
+
+export const blockUserCntrl= async (req: Request, res: Response) => {
+    try {
+        const {id}=req.params
+        const data=await blockUser(userRepository)(id)
+        res.json({status:true})
+    } catch (error) {
+        
+    }
+}
+
+export const unBlockUserCntrl= async (req: Request, res: Response) => {
+    try {
+        const {id}=req.params
+        const data=await unBlockUser(userRepository)(id)
+        res.json({status:true})
+    } catch (error) {
+        
+    }
 }
