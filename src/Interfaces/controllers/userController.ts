@@ -211,8 +211,8 @@ export const updateProfileInformation = async (req: Request, res: Response) => {
 
         if (userId) {
             const { father, mother, dob, nationality, permanent, present, marital, gender, skills, projects } = req.body
-            const resoponse = await updateProfile(userRepository)(father, mother, dob, nationality, permanent, present, marital, gender, skills, projects, userId)
-            return resoponse
+            const response = await updateProfile(userRepository)(father, mother, dob, nationality, permanent, present, marital, gender, skills, projects, userId)
+            res.json({response})
         }
     } catch (error) {
 
@@ -228,7 +228,9 @@ export const updateEducationInformation = async (req: Request, res: Response) =>
 
         if (userId) {
             const { education, result, institute, starting, ending } = req.body
-            const resoponse = await updateEducation(userRepository)(education, result, institute, starting, ending, userId)
+            const response = await updateEducation(userRepository)(education, result, institute, starting, ending, userId)
+            res.json({response})
+
         }
     } catch (error) {
 
@@ -241,7 +243,8 @@ export const updateProfInformation = async (req: Request, res: Response) => {
         const { userId } = req.params
         if (userId) {
             const { company, designation, experience } = req.body
-            const resoponse = await updateProfessional(userRepository)(company, designation, experience, userId)
+            const response = await updateProfessional(userRepository)(company, designation, experience, userId)
+            res.json({response})
         }
     } catch (error) {
 
