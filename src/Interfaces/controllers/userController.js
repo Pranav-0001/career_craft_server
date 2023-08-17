@@ -212,8 +212,8 @@ const updateProfileInformation = (req, res) => __awaiter(void 0, void 0, void 0,
         console.log("hey", userId);
         if (userId) {
             const { father, mother, dob, nationality, permanent, present, marital, gender, skills, projects } = req.body;
-            const resoponse = yield (0, updateUser_1.updateProfile)(userRepository)(father, mother, dob, nationality, permanent, present, marital, gender, skills, projects, userId);
-            return resoponse;
+            const response = yield (0, updateUser_1.updateProfile)(userRepository)(father, mother, dob, nationality, permanent, present, marital, gender, skills, projects, userId);
+            res.json({ response });
         }
     }
     catch (error) {
@@ -225,7 +225,8 @@ const updateEducationInformation = (req, res) => __awaiter(void 0, void 0, void 
         const { userId } = req.params;
         if (userId) {
             const { education, result, institute, starting, ending } = req.body;
-            const resoponse = yield (0, updateUser_1.updateEducation)(userRepository)(education, result, institute, starting, ending, userId);
+            const response = yield (0, updateUser_1.updateEducation)(userRepository)(education, result, institute, starting, ending, userId);
+            res.json({ response });
         }
     }
     catch (error) {
@@ -237,7 +238,8 @@ const updateProfInformation = (req, res) => __awaiter(void 0, void 0, void 0, fu
         const { userId } = req.params;
         if (userId) {
             const { company, designation, experience } = req.body;
-            const resoponse = yield (0, updateUser_1.updateProfessional)(userRepository)(company, designation, experience, userId);
+            const response = yield (0, updateUser_1.updateProfessional)(userRepository)(company, designation, experience, userId);
+            res.json({ response });
         }
     }
     catch (error) {
