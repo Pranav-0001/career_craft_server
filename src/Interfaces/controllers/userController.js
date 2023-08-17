@@ -199,6 +199,7 @@ const updateBasicInformation = (req, res) => __awaiter(void 0, void 0, void 0, f
             const { firstname, lastname, phone, qualification, objective, about, imageURL } = req.body;
             const response = yield (0, updateUser_1.updateBasic)(userRepository)(firstname, lastname, phone, qualification, objective, about, imageURL, userId);
             console.log(response);
+            res.json({ response });
         }
     }
     catch (error) {

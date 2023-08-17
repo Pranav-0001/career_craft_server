@@ -195,6 +195,7 @@ export const updateBasicInformation = async (req: Request, res: Response) => {
             const { firstname, lastname, phone, qualification, objective, about, imageURL } = req.body
             const response = await updateBasic(userRepository)(firstname, lastname, phone, qualification, objective, about, imageURL, userId)
             console.log(response);
+            res.json({response})
 
         }
     } catch (error) {
