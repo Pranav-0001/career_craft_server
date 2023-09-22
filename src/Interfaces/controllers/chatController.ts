@@ -24,6 +24,18 @@ export const acceptApplicationCntroller = async (req: Request, res: Response) =>
     }
 
 }
+export const rejectApplicationCntroller = async (req: Request, res: Response) => {
+    try {
+        const { userId, empId, applicationId } = req.body
+        if (applicationId) {
+            const updateStatus = await updateApplicationStatus(applyRepository)(applicationId, "Rejected")
+        }
+        res.json({update: true })
+    } catch (error) {
+
+    }
+
+}
 
 export const fetchEmpChatsCntrlr = async (req: Request, res: Response) => {
     try {

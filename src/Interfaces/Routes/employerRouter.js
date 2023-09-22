@@ -18,6 +18,7 @@ router.post("/logout", employerController_1.removeEmpRefreshToken);
 router.get("/employer-jobs/:id", empAuth_1.empAuth, employerController_1.getEmployerJobs);
 router.get('/getapplicationsbyemp', empAuth_1.empAuth, applicationController_1.getApplicationByEmpIdCntrl);
 router.post('/accept-application', empAuth_1.empAuth, chatController_1.acceptApplicationCntroller);
+router.post('/reject-application', empAuth_1.empAuth, chatController_1.rejectApplicationCntroller);
 router.get('/fetchChats/:empId', chatController_1.fetchEmpChatsCntrlr);
 router.post('/add-question', questionController_1.addQuestionCntrl);
 router.get('/getquestions', questionController_1.getAllQuestionsCntrl);

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateChatCntrlr = exports.fetchEmpChatsCntrlr = exports.acceptApplicationCntroller = void 0;
+exports.CreateChatCntrlr = exports.fetchEmpChatsCntrlr = exports.rejectApplicationCntroller = exports.acceptApplicationCntroller = void 0;
 const applicationRepository_1 = require("../../infra/repositories/applicationRepository");
 const chatRepository_1 = require("../../infra/repositories/chatRepository");
 const chatModel_1 = require("../../infra/Database/chatModel");
@@ -31,6 +31,18 @@ const acceptApplicationCntroller = (req, res) => __awaiter(void 0, void 0, void 
     }
 });
 exports.acceptApplicationCntroller = acceptApplicationCntroller;
+const rejectApplicationCntroller = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { userId, empId, applicationId } = req.body;
+        if (applicationId) {
+            const updateStatus = yield (0, jobApplication_1.updateApplicationStatus)(applyRepository)(applicationId, "Rejected");
+        }
+        res.json({ update: true });
+    }
+    catch (error) {
+    }
+});
+exports.rejectApplicationCntroller = rejectApplicationCntroller;
 const fetchEmpChatsCntrlr = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const empId = req.params.empId;

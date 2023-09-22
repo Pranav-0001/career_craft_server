@@ -20,7 +20,7 @@ let port=process.env.PORT
 const app=express()
 app.use(express.json());
 app.use(cors({
-    origin: ["https://careercraft.vercel.app"],
+    origin: ["https://careercraft.vercel.app","http://localhost:3000"],
     methods: ["GET", "POST" ,"PUT"],
     credentials: true
 }))

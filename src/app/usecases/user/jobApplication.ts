@@ -32,6 +32,8 @@ export const updateApplicationStatus=(applicationRepository:applicationRepositor
     return update
 }
 
+
+
 export const getMyApplications=(applicationRepository:applicationRepository)=>async(userId:string)=>{
     const data=await applicationRepository.getApplicationCountByCanId(userId)
     return data
