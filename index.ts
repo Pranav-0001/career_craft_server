@@ -39,8 +39,8 @@ const server= app.listen(port , ()=>{
 const io=require('socket.io')(server , {
     pingTimeout:60000,
     cors:{
-        origin:'*'
-        // origin:'http://10.4.3.148:3000'
+        origin: ["https://careercraft.vercel.app"],
+        methods: ["GET", "POST", "PUT"]
     },
 })
 
