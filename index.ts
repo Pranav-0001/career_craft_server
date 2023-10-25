@@ -20,7 +20,7 @@ let port=process.env.PORT
 const app=express()
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000","https://careercraft.vercel.app"],
     methods: ["GET", "POST" ,"PUT"],
     credentials: true
 }))
@@ -39,7 +39,7 @@ const server= app.listen(port , ()=>{
 const io=require('socket.io')(server , {
     pingTimeout:60000,
     cors:{
-        origin:'http://localhost:3000'
+        origin:['http://localhost:3000','https://careercraft.vercel.app']
         // origin:'http://10.4.3.148:3000'
     },
 })
