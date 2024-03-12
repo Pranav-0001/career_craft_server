@@ -8,19 +8,20 @@ import messageRouter from './src/Interfaces/Routes/messageRoute'
 import { db } from './src/infra/Database/config'
 
 import cookieParser from 'cookie-parser'
-import { Socket } from 'socket.io'
 import { newMessageRecieved } from './src/domain/models/chat'
 
 
 
 const cors=require('cors')
 dotenv.config()
+console.log(process.env.CLIENT_URL);
+
 
 let port=process.env.PORT
 const app=express()
 app.use(express.json());
 app.use(cors({
-    origin: ["https://careercraft.vercel.app"],
+    origin: [process.env.CLIENT_URL],
     methods: ["GET", "POST" ,"PUT"],
     credentials: true
 }))
@@ -39,7 +40,7 @@ const server= app.listen(port , ()=>{
 const io=require('socket.io')(server , {
     pingTimeout:60000,
     cors:{
-        origin: ["https://careercraft.vercel.app"],
+        origin: [process.env.CLIENT_URL],
         methods: ["GET", "POST", "PUT"]
     },
 })
