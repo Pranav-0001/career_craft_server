@@ -13,11 +13,12 @@ const config_1 = require("./src/infra/Database/config");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors = require('cors');
 dotenv_1.default.config();
+console.log(process.env.CLIENT_URL);
 let port = process.env.PORT;
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(cors({
-    origin: ["https://careercraft.vercel.app"],
+    origin: [process.env.CLIENT_URL],
     methods: ["GET", "POST", "PUT"],
     credentials: true
 }));
@@ -33,7 +34,7 @@ const server = app.listen(port, () => {
 const io = require('socket.io')(server, {
     pingTimeout: 60000,
     cors: {
-        origin: ["https://careercraft.vercel.app"],
+        origin: [process.env.CLIENT_URL],
         methods: ["GET", "POST", "PUT"]
     },
 });
