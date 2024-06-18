@@ -1,23 +1,29 @@
 {
-    "version": 2,
-    "builds": [
+  "version": 2,
+  "builds": [
       {
-        "src": "./dist/index.js",
-        "use": "@vercel/node"
+          "src": "./dist/index.js",
+          "use": "@vercel/node"
       }
-    ],
-    "routes": [
+  ],
+  "routes": [
       {
-        "src": "/public/(.*)",
-        "dest": "/public/$1"
+          "src": "/public/(.*)",
+          "dest": "/public/$1"
       },
       {
-        "src": "/views/(.*)",
-        "dest": "/views/$1"
+          "src": "/views/(.*)",
+          "dest": "/views/$1"
       },
       {
-        "src": "/(.*)",
-        "dest": "/dist/index.js"
+          "src": "/(.*)",
+          "dest": "/dist/index.js"
       }
-    ]
-  }
+  ],
+  "rewrites": [
+      {
+          "source": "/(.*)",
+          "destination": "/"
+      }
+  ]
+}
